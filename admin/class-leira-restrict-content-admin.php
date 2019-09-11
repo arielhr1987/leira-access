@@ -140,8 +140,8 @@ class Leira_Restrict_Content_Admin{
 
 
         <div class="leira-restrict-content-container description description-wide">
-            <p>
-                <span class="description"><?php _e( "Visible to:", 'leira-restrict-content' ); ?></span>
+            <p class="description">
+				<?php _e( "Visible to:", 'leira-restrict-content' ); ?>
             </p>
 
             <input type="hidden" name="leira-restrict-content-nonce"
@@ -176,8 +176,9 @@ class Leira_Restrict_Content_Admin{
             </label>
 
             <div class="leira-restrict-content-roles description">
-                <span class="description"><?php _e( "Restrict menu item to a minimum role", 'leira-restrict-content' ); ?></span>
-                <br/>
+                <p class="description">
+					<?php _e( "Restrict menu item to a minimum role", 'leira-restrict-content' ); ?>
+                </p>
 
 				<?php
 				$i = 1;

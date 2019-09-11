@@ -2,8 +2,19 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
-div.leira-restrict-content-roles {
-  display: none; }
+.leira-restrict-content-container input[type="checkbox"] {
+  margin-top: 0; }
+.leira-restrict-content-container input[type="radio"] {
+  margin-top: 0; }
+.leira-restrict-content-container label {
+  vertical-align: middle;
+  font-size: 13px;
+  line-height: 1.5; }
+.leira-restrict-content-container div.leira-restrict-content-roles {
+  display: none;
+  margin-left: 20px; }
+  .leira-restrict-content-container div.leira-restrict-content-roles > p.description {
+    margin: 0; }
 
 input.leira-restrict-content-status:checked + label + div.leira-restrict-content-roles {
   display: block; }
