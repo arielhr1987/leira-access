@@ -1,14 +1,14 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
+=== Leira Restrict Content ===
+Contributors: arielhr1987
 Donate link: https://github.com/arielhr1987
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+Tags: users, content, restrict, access, widgets, nav, blocks, access
+Requires at least: 4.1
+Tested up to: 5.2
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Restrict your users access to different site sections like, navs, widget, pages, categories etc.
 
 == Description ==
 
@@ -68,19 +68,7 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 == Changelog ==
 
 = 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
-
-== Upgrade Notice ==
-
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
+* First plugin release.
 
 == Arbitrary section ==
 

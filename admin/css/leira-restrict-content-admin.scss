@@ -2,10 +2,12 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
 div.leira-restrict-content-roles {
-  display: none; }
+  display: none;
+}
 
 input.leira-restrict-content-status:checked + label + div.leira-restrict-content-roles {
-  display: block; }
+  display: block;
+}
 
-/*# sourceMappingURL=leira-restrict-content-admin.css.map */

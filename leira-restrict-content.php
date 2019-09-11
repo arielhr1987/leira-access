@@ -65,6 +65,15 @@ register_deactivation_hook( __FILE__, 'deactivate_leira_restrict_content' );
 require plugin_dir_path( __FILE__ ) . 'includes/class-leira-restrict-content.php';
 
 /**
+ * Helper method to get the main instance of the plugin
+ *
+ * @return Leira_Restrict_Content
+ */
+function leira_restrict_content() {
+	return Leira_Restrict_Content::instance();
+}
+
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,
@@ -73,10 +82,4 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-leira-restrict-content.php
  *
  * @since    1.0.0
  */
-function run_leira_restrict_content() {
-
-	$plugin = new Leira_Restrict_Content();
-	$plugin->run();
-
-}
-run_leira_restrict_content();
+leira_restrict_content()->run();

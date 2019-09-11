@@ -24,8 +24,7 @@
  * @subpackage Leira_Restrict_Content/includes
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_i18n {
-
+class Leira_Restrict_Content_i18n{
 
 	/**
 	 * Load the plugin text domain for translation.
@@ -41,7 +40,5 @@ class Leira_Restrict_Content_i18n {
 		);
 
 	}
-
-
 
 }
