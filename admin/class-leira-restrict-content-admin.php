@@ -53,6 +53,21 @@ class Leira_Restrict_Content_Admin{
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
+		function sidebar_plugin_register() {
+			wp_register_script(
+				'leira-restrict-content',
+				plugin_dir_url( __FILE__ ) . 'js/leira-restrict-content-admin.js',
+				array( 'wp-plugins', 'wp-edit-post', 'wp-element' )
+			);
+		}
+
+		add_action( 'init', 'sidebar_plugin_register' );
+
+		function sidebar_plugin_script_enqueue() {
+			wp_enqueue_script( 'leira-restrict-content' );
+		}
+
+		add_action( 'enqueue_block_editor_assets', 'sidebar_plugin_script_enqueue' );
 	}
 
 	/**
@@ -97,11 +112,28 @@ class Leira_Restrict_Content_Admin{
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-restrict-content-admin.js', array( 'jquery' ), $this->version, false );
+		//wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-restrict-content-admin.js', array( 'jquery' ), $this->version, false );
+
 
 	}
 
-	public function form( $roles, $id ) {
+	/**
+	 * Render the form to select content visibility
+	 *
+	 * @param array  $roles
+	 * @param string $id
+	 * @param array  $options Possible options are:
+	 *                        'show_label' => true,// show the label
+	 *                        'label'      => __( 'Visible to', 'leira-restrict-content' ), //the label to show
+	 *                        'add_nonce'  => true //add nonce or not
+	 */
+	public function form( $roles, $id = '', $options = array() ) {
+		$options = array_merge( array(
+			'show_label' => true,
+			'label'      => __( 'Visible to', 'leira-restrict-content' ),
+			'add_nonce'  => true
+		), $options );
+
 		$wp_roles = wp_roles();
 		/**
 		 * Pass the menu item to the filter function.
@@ -134,74 +166,157 @@ class Leira_Restrict_Content_Admin{
 		}
 		// The specific roles to check.
 		$checked_roles = is_array( $roles ) ? $roles : false;
-		// Whether to display the role checkboxes.
-		$hidden = $status == 'in' ? '' : 'display: none;';
+
+		$html_name_id = empty( $id ) ? "" : "[$id]";
+		$html_for_id  = empty( $id ) ? "" : "-$id";
+
 		?>
 
 
-        <div class="leira-restrict-content-container description description-wide">
-            <p class="description">
-				<?php _e( "Visible to:", 'leira-restrict-content' ); ?>
-            </p>
-
-            <input type="hidden" name="leira-restrict-content-nonce"
-                   value="<?php echo wp_create_nonce( 'leira-restrict-content-nonce-name' ); ?>"/>
-
-            <input type="hidden" class="leira-restrict-content-item-id" value="<?php echo $id; ?>"/>
-
-            <input type="radio" class="leira-restrict-content-status"
-                   name="leira-restrict-content-status[<?php echo $id; ?>]"
-                   id="leira-restrict-content-for-<?php echo $id; ?>" <?php checked( '', $status ); ?>
-                   value=""/>
-            <label for="leira-restrict-content-for-<?php echo $id; ?>">
-				<?php _e( 'Everyone', 'leira-restrict-content' ); ?>
-            </label>
-            <br>
-
-            <input type="radio" class="leira-restrict-content-status"
-                   name="leira-restrict-content-status[<?php echo $id; ?>]"
-                   id="leira-restrict-content-out-for-<?php echo $id; ?>" <?php checked( 'out', $status ); ?>
-                   value="out"/>
-            <label for="leira-restrict-content-out-for-<?php echo $id; ?>">
-				<?php _e( 'Logged Out Users', 'leira-restrict-content' ); ?>
-            </label>
-            <br>
-
-            <input type="radio" class="leira-restrict-content-status"
-                   name="leira-restrict-content-status[<?php echo $id; ?>]"
-                   id="leira-restrict-content-in-for-<?php echo $id; ?>" <?php checked( 'in', $status ); ?>
-                   value="in"/>
-            <label for="leira-restrict-content-in-for-<?php echo $id; ?>">
-				<?php _e( 'Logged In Users', 'leira-restrict-content' ); ?>
-            </label>
-
-            <div class="leira-restrict-content-roles description">
-                <p class="description">
-					<?php _e( "Restrict menu item to a minimum role", 'leira-restrict-content' ); ?>
+        <div class="leira-restrict-content-container">
+			<?php if ( $options['show_label'] ): ?>
+                <p class="">
+					<?php echo $options['label']; ?>
                 </p>
+			<?php endif; ?>
 
-				<?php
-				$i = 1;
-				/* Loop through each of the available roles. */
-				foreach ( $display_roles as $role => $name ) {
-					/* If the role has been selected, make sure it's checked. */
-					$checked = checked( true, ( is_array( $checked_roles ) && in_array( $role, $checked_roles ) ), false );
-					?>
-                    <input type="checkbox" name="leira-restrict-content-role[<?php echo $id; ?>][<?php echo $i; ?>]"
-                           id="leira-restrict-content-<?php echo $role; ?>-for-<?php echo $id; ?>" <?php echo $checked; ?>
-                           value="<?php echo $role; ?>"/>
-                    <label for="leira-restrict-content-<?php echo $role; ?>-for-<?php echo $id; ?>">
-						<?php echo esc_html( $name ); ?>
-						<?php $i ++; ?>
-                    </label>
-                    <br>
+            <div class="leira-restrict-content-controls">
+                <input type="hidden" name="leira-restrict-content-nonce"
+                       value="<?php echo wp_create_nonce( 'leira-restrict-content-nonce-name' ); ?>"/>
 
-				<?php } ?>
+                <!--                <input type="hidden" class="leira-restrict-content-item-id" value="-->
+				<?php //echo $id; ?><!--"/>-->
 
+                <input type="radio" class="leira-restrict-content-status"
+                       name="leira-restrict-content-status<?php echo $html_name_id; ?>"
+                       id="leira-restrict-content-for<?php echo $html_for_id; ?>" <?php checked( '', $status ); ?>
+                       value=""/>
+                <label for="leira-restrict-content-for<?php echo $html_for_id; ?>">
+					<?php _e( 'Everyone', 'leira-restrict-content' ); ?>
+                </label>
+                <br>
+
+                <input type="radio" class="leira-restrict-content-status"
+                       name="leira-restrict-content-status<?php echo $html_name_id; ?>"
+                       id="leira-restrict-content-out-for<?php echo $html_for_id; ?>" <?php checked( 'out', $status ); ?>
+                       value="out"/>
+                <label for="leira-restrict-content-out-for<?php echo $html_for_id; ?>">
+					<?php _e( 'Logged Out Users', 'leira-restrict-content' ); ?>
+                </label>
+                <br>
+
+                <input type="radio" class="leira-restrict-content-status"
+                       name="leira-restrict-content-status<?php echo $html_name_id; ?>"
+                       id="leira-restrict-content-in-for<?php echo $html_for_id; ?>" <?php checked( 'in', $status ); ?>
+                       value="in"/>
+                <label for="leira-restrict-content-in-for<?php echo $html_for_id; ?>">
+					<?php _e( 'Logged In Users', 'leira-restrict-content' ); ?>
+                </label>
+
+                <div class="leira-restrict-content-roles">
+                    <p class="">
+						<?php _e( "Restrict item to a minimum role", 'leira-restrict-content' ); ?>
+                    </p>
+
+					<?php
+					$i = 1;
+					/* Loop through each of the available roles. */
+					foreach ( $display_roles as $role => $name ) {
+						/* If the role has been selected, make sure it's checked. */
+						$checked = checked( true, ( is_array( $checked_roles ) && in_array( $role, $checked_roles ) ), false );
+						?>
+                        <input type="checkbox"
+                               name="leira-restrict-content-role<?php echo $html_name_id; ?>[<?php echo $i; ?>]"
+                               id="leira-restrict-content-<?php echo $role; ?>-for<?php echo $html_for_id; ?>" <?php echo $checked; ?>
+                               value="<?php echo $role; ?>"/>
+                        <label for="leira-restrict-content-<?php echo $role; ?>-for<?php echo $html_for_id; ?>">
+							<?php echo esc_html( $name ); ?>
+							<?php $i ++; ?>
+                        </label>
+                        <br>
+
+					<?php } ?>
+
+                </div>
             </div>
         </div>
 
 		<?php
+	}
+
+	/**
+	 * Save the restrict options to metadata or options if is a widget
+	 *
+	 * @param string $id          The id
+	 * @param string $type        The object type you are saving
+	 * @param bool   $use_post_id Use or not the id post
+	 *
+	 * @return bool
+	 */
+	public function save( $id, $type = 'post', $use_post_id = true ) {
+
+		// Verify this came from our screen and with proper authorization.
+		if ( ! isset( $_POST['leira-restrict-content-nonce'] ) || ! wp_verify_nonce( $_POST['leira-restrict-content-nonce'], 'leira-restrict-content-nonce-name' ) ) {
+			return false;
+		}
+
+		$wp_roles      = wp_roles();
+		$allowed_roles = apply_filters( 'leira_restrict_content_available_roles', $wp_roles->role_names );
+		$saved_data    = false;
+
+		$status = false;
+		$roles  = array();
+		if ( $use_post_id ) {
+			$status = isset( $_POST['leira-restrict-content-status'][ $id ] ) ? $_POST['leira-restrict-content-status'][ $id ] : $status;
+			$roles  = ( ! empty( $_POST['leira-restrict-content-role'][ $id ] ) ) ? $_POST['leira-restrict-content-role'][ $id ] : $roles;
+		} else {
+			$status = isset( $_POST['leira-restrict-content-status'] ) ? $_POST['leira-restrict-content-status'] : $status;
+			$roles  = ( ! empty( $_POST['leira-restrict-content-role'] ) ) ? $_POST['leira-restrict-content-role'] : $roles;
+		}
+
+
+		if ( ! empty( $status ) ) {
+
+			if ( $status == 'in' && ! empty ( $roles ) ) {
+				$custom_roles = array();
+				// Only save allowed roles.
+				foreach ( $roles as $role ) {
+					if ( isset( $allowed_roles[ $role ] ) ) {
+						$custom_roles[] = $role;
+					}
+				}
+				if ( ! empty ( $custom_roles ) ) {
+					$saved_data = $custom_roles;
+				}
+			} else if ( in_array( $status, array( 'in', 'out' ) ) ) {
+				$saved_data = $status;
+			}
+		}
+
+
+		switch ( $type ) {
+			case 'post':
+				if ( $saved_data ) {
+					update_post_meta( $id, '_leira-restrict-content', $saved_data );
+				} else {
+					delete_post_meta( $id, '_leira-restrict-content' );
+				}
+				break;
+			case 'term':
+				if ( $saved_data ) {
+					update_term_meta( $id, '_leira-restrict-content', $saved_data );
+				} else {
+					delete_term_meta( $id, '_leira-restrict-content' );
+				}
+				break;
+			case 'widget':
+
+				break;
+			default:
+
+		}
+
+		return true;
 	}
 
 }

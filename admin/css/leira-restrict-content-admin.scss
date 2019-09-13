@@ -4,6 +4,14 @@
  */
 
 .leira-restrict-content-container {
+  margin: 1em 0;
+  font-size: 13px;
+  line-height: 1.5;
+  vertical-align: middle;
+
+  > p {
+    margin: 5px 0 0 0;
+  }
 
   input[type="checkbox"] {
     margin-top: 0;
@@ -13,18 +21,14 @@
     margin-top: 0;
   }
 
-  label {
-    vertical-align: middle;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
   div.leira-restrict-content-roles {
     display: none;
     margin-left: 20px;
 
-    > p.description {
+    > p {
       margin: 0;
+      font-style: italic;
+      color: #666;
     }
   }
 }
@@ -32,4 +36,83 @@
 input.leira-restrict-content-status:checked + label + div.leira-restrict-content-roles {
   display: block;
 }
+
+//Menu Items
+.menu-item-settings {
+  .leira-restrict-content-container {
+    > p {
+      color: #666;
+      font-style: italic;
+    }
+  }
+}
+
+//Taxonomy form
+#addtag {
+  .leira-restrict-content-container {
+    margin: 0;
+
+    label {
+      display: inline-block;
+      padding: 0;
+      vertical-align: middle;
+    }
+  }
+}
+
+#edittag {
+  .leira-restrict-content-container {
+    margin: 0;
+  }
+}
+
+
+//quick edit mode
+.inline-edit-row {
+  .leira-restrict-content-container {
+
+    > p {
+      font-style: italic;
+      margin: 5px 0 0 0;
+      color: #555
+    }
+
+    label {
+      display: inline-block;
+      line-height: 1.5;
+    }
+  }
+}
+
+//tables
+.wp-list-table {
+  .manage-column.column-leira-restrict-content {
+    width: 10em;
+  }
+
+  //Posts & Taxonomies
+  &.tags, &.posts {
+    .leira-restrict-content-container {
+      display: block;
+      //margin: .2em 0;
+      margin: 0;
+      line-height: 1.5;
+
+      > p {
+        display: block;
+        float: left;
+        width: 6em;
+        line-height: 2.5;
+        font-size: 12px;
+        margin: 0;
+      }
+
+      > .leira-restrict-content-controls {
+        display: block;
+        margin-left: 6em;
+      }
+    }
+  }
+}
+
 

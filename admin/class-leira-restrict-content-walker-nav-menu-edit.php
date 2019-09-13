@@ -59,7 +59,7 @@ class Leira_Restrict_content_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit{
 		 * @param array  $args    Menu item args.
 		 *
 		 * @return string Custom fields
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 */
 		do_action( 'wp_nav_menu_item_custom_fields', $item_id, $item, $depth, $args );

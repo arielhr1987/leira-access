@@ -26,6 +26,8 @@
  * @package    Leira_Restrict_Content
  * @subpackage Leira_Restrict_Content/includes
  * @author     Ariel <arielhr1987@gmail.com>
+ *
+ * @property Leira_Restrict_Content_Admin admin
  */
 class Leira_Restrict_Content{
 
@@ -126,6 +128,7 @@ class Leira_Restrict_Content{
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-restrict-content-i18n.php';
 
 		if ( is_admin() ) {
+
 			/**
 			 * The class responsible for defining all actions that occur in the admin area.
 			 */
@@ -136,6 +139,20 @@ class Leira_Restrict_Content{
 			 */
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-menu.php';
 
+			/**
+			 * Widgets.
+			 */
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-widget.php';
+
+			/**
+			 * Post.
+			 */
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-post-type.php';
+
+			/**
+			 * Taxonomies
+			 */
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-taxonomy.php';
 		}
 
 		/**
@@ -179,6 +196,7 @@ class Leira_Restrict_Content{
 			$plugin_admin = new Leira_Restrict_Content_Admin( $this->get_plugin_name(), $this->get_version() );
 
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 			//Add the admin class instance to the loader
@@ -191,13 +209,61 @@ class Leira_Restrict_Content{
 
 			//Use custom admin walker.
 			$this->loader->add_filter( 'wp_edit_nav_menu_walker', $plugin_admin_menu, 'edit_nav_menu_walker', 10, 2 );
+
 			//Add new fields via hook. This is a custom filter fired from within the Walker_Nav_Menu_Edit class
-			$this->loader->add_filter( 'wp_nav_menu_item_custom_fields', $plugin_admin_menu, 'nav_menu_item_custom_fields', 10, 4 );
+			$this->loader->add_filter( 'wp_nav_menu_item_custom_fields', $plugin_admin_menu, 'form', 10, 4 );
+
 			//Save the menu item metadata.
 			$this->loader->add_action( 'wp_update_nav_menu_item', $plugin_admin_menu, 'update_nav_menu_item', 10, 2 );
 
 			//add the admin menu class instance to de loader
 			$this->loader->set( 'admin_menu', $plugin_admin_menu );
+
+			/**
+			 * Widgets
+			 */
+			$plugin_admin_widget = new Leira_Restrict_Content_Admin_Widget();
+
+			$this->loader->add_action( 'in_widget_form', $plugin_admin_widget, 'form', 20, 3 );
+
+			$this->loader->set( 'admin_widget', $plugin_admin_widget );
+
+			/**
+			 * Posts
+			 */
+			$plugin_admin_post_type = new Leira_Restrict_Content_Admin_Post_Type();
+
+			//Add meta-box to post edit page
+			$this->loader->add_action( 'load-post.php', $plugin_admin_post_type, 'init' );
+
+			//Add meta-box to edit post page
+			$this->loader->add_action( 'load-post-new.php', $plugin_admin_post_type, 'init' );
+
+			//register filters and actions to add custom columns
+			$this->loader->add_action( 'current_screen', $plugin_admin_post_type, 'current_screen' );
+
+			//add bulk quick edit fields
+			//TODO: Future release
+			//$this->loader->add_action( 'bulk_edit_custom_box', $plugin_admin_post_type, 'bulk_edit_custom_box', 10, 2 );
+
+			//add quick edit fields
+			$this->loader->add_action( 'quick_edit_custom_box', $plugin_admin_post_type, 'quick_edit_custom_box', 10, 2 );
+
+			//add to loader
+			$this->loader->set( 'admin_post_type', $plugin_admin_post_type );
+
+			/**
+			 * Taxonomies
+			 */
+			$plugin_admin_taxonomy = new Leira_Restrict_Content_Admin_Taxonomy();
+
+			//register filters and actions to add custom columns
+			//$this->loader->add_action( 'current_screen', $plugin_admin_taxonomy, 'current_screen' );
+			$this->loader->add_action( 'wp_loaded', $plugin_admin_taxonomy, 'init' );
+
+			//add to loader
+			$this->loader->set( 'admin_taxonomy', $plugin_admin_taxonomy );
+
 		}
 	}
 
@@ -285,7 +351,9 @@ class Leira_Restrict_Content{
 	 * @since     1.0.0
 	 *
 	 */
-	public function __get( $key ) {
+	public function __get(
+		$key
+	) {
 		return $this->get_loader()->get( $key );
 	}
 
@@ -298,7 +366,9 @@ class Leira_Restrict_Content{
 	 * @since     1.0.0
 	 *
 	 */
-	public function __set( $key, $value ) {
+	public function __set(
+		$key, $value
+	) {
 		$this->get_loader()->set( $key, $value );
 	}
 
