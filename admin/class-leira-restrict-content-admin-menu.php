@@ -54,47 +54,14 @@ class Leira_Restrict_Content_Admin_Menu{
 	/**
 	 * Save the roles as menu item meta
 	 *
+	 * @param integer $menu_id
+	 * @param integer $menu_item_db_id The database menu item id
+	 *
 	 * @return string
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public function update_nav_menu_item( $menu_id, $menu_item_db_id ) {
-		$wp_roles      = wp_roles();
-		$allowed_roles = apply_filters( 'leira_restrict_content_available_roles', $wp_roles->role_names );
-		// Verify this came from our screen and with proper authorization.
-		if ( ! isset( $_POST['leira-restrict-content-nonce'] ) || ! wp_verify_nonce( $_POST['leira-restrict-content-nonce'], 'leira-restrict-content-nonce-name' ) ) {
-			return false;
-		}
-		$saved_data = false;
-		if ( isset( $_POST['leira-restrict-content-status'][ $menu_item_db_id ] ) && $_POST['leira-restrict-content-status'][ $menu_item_db_id ] == 'in' && ! empty ( $_POST['leira-restrict-content-role'][ $menu_item_db_id ] ) ) {
-
-			$custom_roles = array();
-
-			// Only save allowed roles.
-			foreach ( (array) $_POST['leira-restrict-content-role'][ $menu_item_db_id ] as $role ) {
-
-				if ( array_key_exists( $role, $allowed_roles ) ) {
-					$custom_roles[] = $role;
-				}
-			}
-
-			if ( ! empty ( $custom_roles ) ) {
-				$saved_data = $custom_roles;
-			}
-
-		} else if ( isset( $_POST['leira-restrict-content-status'][ $menu_item_db_id ] ) && in_array( $_POST['leira-restrict-content-status'][ $menu_item_db_id ], array(
-				'in',
-				'out'
-			) ) ) {
-
-			$saved_data = $_POST['leira-restrict-content-status'][ $menu_item_db_id ];
-
-		}
-
-		if ( $saved_data ) {
-			update_post_meta( $menu_item_db_id, '_leira-restrict-content', $saved_data );
-		} else {
-			delete_post_meta( $menu_item_db_id, '_leira-restrict-content' );
-		}
+		leira_restrict_content()->admin->save( $menu_item_db_id );
 
 		return true;
 	}

@@ -44,10 +44,13 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
   color: #555; }
 .inline-edit-row .leira-restrict-content-container label {
   display: inline-block;
-  line-height: 1.5; }
+  line-height: 1.5;
+  margin: 0; }
 
-.wp-list-table .manage-column.column-leira-restrict-content {
+.wp-list-table .column-leira-restrict-content {
   width: 10em; }
+  .wp-list-table .column-leira-restrict-content ul, .wp-list-table .column-leira-restrict-content li {
+    margin: 0; }
 .wp-list-table.tags .leira-restrict-content-container, .wp-list-table.posts .leira-restrict-content-container {
   display: block;
   margin: 0;

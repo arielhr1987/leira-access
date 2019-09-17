@@ -80,14 +80,19 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
     label {
       display: inline-block;
       line-height: 1.5;
+      margin: 0;
     }
   }
 }
 
 //tables
 .wp-list-table {
-  .manage-column.column-leira-restrict-content {
+  .column-leira-restrict-content {
     width: 10em;
+
+    ul, li {
+      margin: 0;
+    }
   }
 
   //Posts & Taxonomies

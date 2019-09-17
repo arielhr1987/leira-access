@@ -23,30 +23,41 @@ class Leira_Restrict_Content_Admin_Widget{
 	 * Use this hook to add extra fields to the widget form.
 	 * The hook is only fired if the value passed to the ‘widget_form_callback’ hook is not false.
 	 *
-	 * @params obj $item - the menu item
-	 * @params array $args
+	 * @param $widget
+	 * @param $return
+	 * @param $instance
 	 *
+	 * @return array
 	 * @since  1.0.0
 	 */
 	public function form( $widget, $return, $instance ) {
 
 		$id    = isset( $widget->id ) ? $widget->id : false;
-		$roles = get_post_meta( $id, '_leira-restrict-content', true );
+		$roles = isset( $instance['_leira-restrict-content'] ) ? $instance['_leira-restrict-content'] : false;
+
 		leira_restrict_content()->admin->form( $roles, $id, array(
 			'label' => __( 'Visible to', 'leira-restrict-content' ) . ':'
 		) );
 
-		return;
+		return array( $widget, $return, $instance );
 	}
 
 	/**
 	 * Save the roles as menu item meta
 	 *
-	 * @return string
+	 * @param array     $instance     The current widget instance's settings.
+	 * @param array     $new_instance Array of new widget settings.
+	 * @param array     $old_instance Array of old widget settings.
+	 * @param WP_Widget $widget       The current widget instance
+	 *
+	 * @return array
 	 * @since 1.0.0
 	 */
-	public function update( $menu_id, $menu_item_db_id ) {
+	public function update( $instance, $new_instance, $old_instance, $widget ) {
+		$save                                    = leira_restrict_content()->admin->save( $widget->id, 'widget' );
+		$new_instance['_leira-restrict-content'] = $save;
 
+		return $new_instance;
 	}
 
 }

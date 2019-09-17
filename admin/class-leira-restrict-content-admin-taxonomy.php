@@ -137,7 +137,15 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 			if ( $restrict == 'in' ) {
 				$output = __( 'Logged In Users', 'leira-restrict-content' );
 			} else if ( is_array( $restrict ) ) {
-				$output = __( 'Logged In Users with Roles', 'leira-restrict-content' );
+				$roles = '';
+				if ( ! empty( $restrict ) ) {
+					$roles .= '<ul>';
+					foreach ( $restrict as $role ) {
+						$roles .= sprintf( '<li>%s</li>', $role );
+					}
+					$roles .= '</ul>';
+				}
+				$output = sprintf( __( 'Logged In Users %s', 'leira-restrict-content' ), $roles );
 			}
 		}
 

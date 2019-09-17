@@ -310,7 +310,7 @@ class Leira_Restrict_Content_Admin{
 				}
 				break;
 			case 'widget':
-
+				return $saved_data;
 				break;
 			default:
 

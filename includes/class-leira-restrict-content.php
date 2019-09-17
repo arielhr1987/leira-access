@@ -127,7 +127,7 @@ class Leira_Restrict_Content{
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-restrict-content-i18n.php';
 
-		if ( is_admin() ) {
+		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 
 			/**
 			 * The class responsible for defining all actions that occur in the admin area.
@@ -135,17 +135,17 @@ class Leira_Restrict_Content{
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin.php';
 
 			/**
-			 * Nav Menu.
+			 * Nav Menu
 			 */
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-menu.php';
 
 			/**
-			 * Widgets.
+			 * Widgets
 			 */
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-widget.php';
 
 			/**
-			 * Post.
+			 * Posts
 			 */
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-post-type.php';
 
@@ -192,7 +192,9 @@ class Leira_Restrict_Content{
 	 * @access   private
 	 */
 	private function define_admin_hooks() {
-		if ( is_admin() ) {
+
+		if ( is_admin() && current_user_can( 'manage_options' ) ) {
+
 			$plugin_admin = new Leira_Restrict_Content_Admin( $this->get_plugin_name(), $this->get_version() );
 
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
@@ -225,6 +227,8 @@ class Leira_Restrict_Content{
 			$plugin_admin_widget = new Leira_Restrict_Content_Admin_Widget();
 
 			$this->loader->add_action( 'in_widget_form', $plugin_admin_widget, 'form', 20, 3 );
+
+			$this->loader->add_filter( 'widget_update_callback', $plugin_admin_widget, 'update', 20, 4 );
 
 			$this->loader->set( 'admin_widget', $plugin_admin_widget );
 
@@ -304,11 +308,17 @@ class Leira_Restrict_Content{
 	 * @since    1.0.0
 	 */
 	public function run() {
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
+	public function init() {
+
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->loader->run();
+
 	}
 
 	/**
