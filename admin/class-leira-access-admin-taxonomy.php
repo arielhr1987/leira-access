@@ -19,41 +19,6 @@ class Leira_Access_Admin_Taxonomy{
 	}
 
 	/**
-	 * Init
-	 */
-	public function init() {
-		//add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
-		//add_action( 'save_post', array( $this, 'update' ), 10, 2 );
-
-		$taxonomies = $this->get_taxonomies();
-		//$screen     = get_current_screen();
-
-		foreach ( $taxonomies as $taxonomy ) {
-			//custom column header
-			$screen_id = 'edit-' . $taxonomy;
-			add_filter( "manage_{$screen_id}_columns", array( $this, 'custom_column_header' ), 10 );
-
-			//custom column content
-			add_action( "manage_{$taxonomy}_custom_column", array(
-				$this,
-				'custom_column_content'
-			), 10, 3 );
-
-			//add quick edit fields
-			add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
-
-			//add fields to taxonomy edit screen
-			add_action( "{$taxonomy}_edit_form_fields", array( $this, 'edit_form_fields' ) );
-
-			add_action( "{$taxonomy}_add_form_fields", array( $this, 'add_form_fields' ) );
-
-			add_action( "edited_{$taxonomy}", array( $this, 'edit' ), 10, 2 );
-
-			add_action( "create_{$taxonomy}", array( $this, 'save' ), 10, 2 );
-		}
-	}
-
-	/**
 	 * Get the list of available taxonomies
 	 *
 	 * @return array
@@ -61,7 +26,7 @@ class Leira_Access_Admin_Taxonomy{
 	public function get_taxonomies() {
 		$taxonomies = get_taxonomies( array( 'public' => true, 'show_ui' => true ), 'names' );
 
-		$exclude = apply_filters( 'leira-access_excluded_taxonomies', array() );
+		$exclude = apply_filters( 'leira_access_excluded_taxonomies', array() );
 
 		$taxonomies = array_diff( $taxonomies, $exclude );
 
@@ -69,41 +34,7 @@ class Leira_Access_Admin_Taxonomy{
 	}
 
 	/**
-	 * We hook the current_screen to add custom columns to taxonomies list table
-	 */
-	public function current_screen() {
-		$taxonomies = $this->get_taxonomies();
-		$screen     = get_current_screen();
-
-		if ( ! empty( $screen->taxonomy ) && in_array( $screen->taxonomy, $taxonomies ) ) {
-
-			//custom column header
-			add_filter( "manage_{$screen->id}_columns", array( $this, 'custom_column_header' ), 10 );
-
-			//custom column content
-			add_action( "manage_{$screen->taxonomy}_custom_column", array(
-				$this,
-				'custom_column_content'
-			), 10, 3 );
-
-			//add quick edit fields
-			add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
-
-			//add fields to taxonomy edit screen
-			add_action( "{$screen->taxonomy}_edit_form_fields", array( $this, 'edit_form_fields' ) );
-
-			add_action( "{$screen->taxonomy}_add_form_fields", array( $this, 'add_form_fields' ) );
-
-			add_action( "edited_{$screen->taxonomy}", array( $this, 'edit' ), 10, 2 );
-
-			add_action( "create_{$screen->taxonomy}", array( $this, 'save' ), 10, 2 );
-
-		}
-
-	}
-
-	/**
-	 * Add column header to list table
+	 * Add column header to taxonomy list table
 	 *
 	 * @param array $columns List of available columns
 	 *
@@ -153,13 +84,15 @@ class Leira_Access_Admin_Taxonomy{
 	}
 
 	/**
-	 * Add interface to quick edit form
+	 * Add quick edit form to taxonomies list table
 	 *
 	 * @param string $column_name
 	 * @param string $post_type
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
-		if ( 'leira-access' != $column_name ) {
+		$screen   = get_current_screen();
+		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : false;
+		if ( 'leira-access' != $column_name || ! in_array( $taxonomy, $this->get_taxonomies() ) ) {
 			return;
 		}
 

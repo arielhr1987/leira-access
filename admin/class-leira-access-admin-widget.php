@@ -54,7 +54,8 @@ class Leira_Access_Admin_Widget{
 	 * @since 1.0.0
 	 */
 	public function update( $instance, $new_instance, $old_instance, $widget ) {
-		$save                                    = leira_access()->admin->save( $widget->id, 'widget' );
+		$save = leira_access()->admin->save( $widget->id, 'widget' );
+
 		$new_instance['_leira-access'] = $save;
 
 		return $new_instance;

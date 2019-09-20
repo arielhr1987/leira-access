@@ -141,7 +141,7 @@ class Leira_Access_Admin{
 		 * by extension the target object) to further customize what filters appear during menu
 		 * construction.
 		 */
-		$display_roles = apply_filters( 'leira-access_available_roles', $wp_roles->role_names, $id ); //TODO: Add $item or item type (post_type)
+		$display_roles = apply_filters( 'leira_access_available_roles', $wp_roles->role_names, $id ); //TODO: Add $item or item type (post_type)
 		/**
 		 * If no roles are being used, don't display the role selection radio buttons at all.
 		 * Unless something deliberately removes the WordPress roles from this list, nothing will
@@ -261,7 +261,7 @@ class Leira_Access_Admin{
 		}
 
 		$wp_roles      = wp_roles();
-		$allowed_roles = apply_filters( 'leira-access_available_roles', $wp_roles->role_names );
+		$allowed_roles = apply_filters( 'leira_access_available_roles', $wp_roles->role_names );
 		$saved_data    = false;
 
 		$status = false;

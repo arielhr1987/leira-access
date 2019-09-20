@@ -89,8 +89,8 @@ class Leira_Access{
 	 * @since    1.0.0
 	 */
 	protected function __construct() {
-		if ( defined( 'LEIRA_RESTRICT_CONTENT_VERSION' ) ) {
-			$this->version = LEIRA_RESTRICT_CONTENT_VERSION;
+		if ( defined( 'LEIRA_ACCESS_VERSION' ) ) {
+			$this->version = LEIRA_ACCESS_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
@@ -243,8 +243,18 @@ class Leira_Access{
 			//Add meta-box to edit post page
 			$this->loader->add_action( 'load-post-new.php', $plugin_admin_post_type, 'init' );
 
-			//register filters and actions to add custom columns
-			$this->loader->add_action( 'current_screen', $plugin_admin_post_type, 'current_screen' );
+			$post_types = $plugin_admin_post_type->get_post_types();
+
+			foreach ( $post_types as $post_type ) {
+
+				//Filters the columns displayed in the Posts list table for a specific post type.
+				//This filter is documented in: wp-admin/includes/class-wp-posts-list-table.php
+				$this->loader->add_filter( "manage_{$post_type}_posts_columns", $plugin_admin_post_type, 'custom_column_header' );
+
+				//Fires for each custom column of a specific post type in the Posts list table.
+				//This action is documented in: wp-admin/includes/class-wp-posts-list-table.php
+				$this->loader->add_action( "manage_{$post_type}_posts_custom_column", $plugin_admin_post_type, 'custom_column_content', 10, 2 );
+			}
 
 			//add bulk quick edit fields
 			//TODO: Future release
@@ -261,9 +271,28 @@ class Leira_Access{
 			 */
 			$plugin_admin_taxonomy = new Leira_Access_Admin_Taxonomy();
 
-			//register filters and actions to add custom columns
-			//$this->loader->add_action( 'current_screen', $plugin_admin_taxonomy, 'current_screen' );
-			$this->loader->add_action( 'wp_loaded', $plugin_admin_taxonomy, 'init' );
+			$taxonomies = $plugin_admin_taxonomy->get_taxonomies();
+
+			foreach ( $taxonomies as $taxonomy ) {
+				//custom column header
+				$this->loader->add_filter( "manage_edit-{$taxonomy}_columns", $plugin_admin_taxonomy, 'custom_column_header', 10 );
+
+				//custom column content
+				$this->loader->add_action( "manage_{$taxonomy}_custom_column", $plugin_admin_taxonomy, 'custom_column_content', 10, 3 );
+
+				//add fields to taxonomy edit screen
+				$this->loader->add_action( "{$taxonomy}_edit_form_fields", $plugin_admin_taxonomy, 'edit_form_fields' );
+
+				$this->loader->add_action( "{$taxonomy}_add_form_fields", $plugin_admin_taxonomy, 'add_form_fields' );
+
+				$this->loader->add_action( "edited_{$taxonomy}", $plugin_admin_taxonomy, 'edit', 10, 2 );
+
+				$this->loader->add_action( "create_{$taxonomy}", $plugin_admin_taxonomy, 'save', 10, 2 );
+
+			}
+
+			//add quick edit fields to taxonomy list table
+			$this->loader->add_action( 'quick_edit_custom_box', $plugin_admin_taxonomy, 'quick_edit_custom_box', 10, 2 );
 
 			//add to loader
 			$this->loader->set( 'admin_taxonomy', $plugin_admin_taxonomy );
@@ -306,6 +335,7 @@ class Leira_Access{
 	 * Run the loader to execute all of the hooks with WordPress.
 	 *
 	 * @since    1.0.0
+	 * @access   public
 	 */
 	public function run() {
 		add_action( 'init', array( $this, 'init' ) );
@@ -315,7 +345,8 @@ class Leira_Access{
 	/**
 	 * Load dependencies and set hooks
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @access public
 	 */
 	public function init() {
 
@@ -333,6 +364,7 @@ class Leira_Access{
 	 *
 	 * @return    string    The name of the plugin.
 	 * @since     1.0.0
+	 * @access    public
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
@@ -364,7 +396,9 @@ class Leira_Access{
 	 * @param string $key
 	 *
 	 * @return mixed|null The instance
+	 *
 	 * @since     1.0.0
+	 * @access    public
 	 *
 	 */
 	public function __get(
@@ -380,6 +414,7 @@ class Leira_Access{
 	 * @param mixed  $value
 	 *
 	 * @since     1.0.0
+	 * @access    public
 	 *
 	 */
 	public function __set(
@@ -394,6 +429,9 @@ class Leira_Access{
 	 * @param string $type admin, ajax, cron or frontend.
 	 *
 	 * @return bool
+	 * @since     1.0.0
+	 * @access    public
+	 *
 	 */
 	public function is_request( $type ) {
 		switch ( $type ) {

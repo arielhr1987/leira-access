@@ -23,7 +23,7 @@ class Leira_Access_Admin_Post_Type{
 	 */
 	public function init() {
 		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
-		add_action( 'save_post', array( $this, 'update' ), 10, 2 );
+		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Leira_Access_Admin_Post_Type{
 	public function get_post_types() {
 		$post_types = get_post_types( array( 'public' => true, 'show_ui' => true ), 'names' );
 
-		$exclude = apply_filters( 'leira-access_excluded_post_types', array(
+		$exclude = apply_filters( 'leira_access_excluded_post_types', array(
 			'forum',
 			'topic',
 			'reply',
@@ -45,27 +45,6 @@ class Leira_Access_Admin_Post_Type{
 		$post_types = array_diff( $post_types, $exclude );
 
 		return $post_types;
-	}
-
-	/**
-	 * We hook the wp_loaded to make sure all post_types are registered so we can add our column to the list table
-	 */
-	public function current_screen() {
-		$post_types = $this->get_post_types();
-		$screen     = get_current_screen();
-
-		if ( $screen && ! empty( $screen->post_type ) && in_array( $screen->post_type, $post_types ) ) {
-
-			$post_type = $screen->post_type;
-
-			//Filters the columns displayed in the Posts list table for a specific post type.
-			//This filter is documented in: wp-admin/includes/class-wp-posts-list-table.php
-			add_filter( "manage_{$post_type}_posts_columns", array( $this, 'custom_column_header' ) );
-
-			//Fires for each custom column of a specific post type in the Posts list table.
-			//This action is documented in: wp-admin/includes/class-wp-posts-list-table.php
-			add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'custom_column_content' ), 10, 2 );
-		}
 	}
 
 	/**
@@ -93,7 +72,7 @@ class Leira_Access_Admin_Post_Type{
 		}
 
 		$access = get_post_meta( $post_id, '_leira-access', true );
-		$output   = __( 'Everyone', 'leira-access' );
+		$output = __( 'Everyone', 'leira-access' );
 
 		if ( $access == 'out' ) {
 			$output = __( 'Logged Out Users', 'leira-access' );
@@ -123,7 +102,7 @@ class Leira_Access_Admin_Post_Type{
 		if ( $screen && ! empty( $screen->post_type ) && in_array( $screen->post_type, $post_types ) ) {
 			add_meta_box(
 				'leira-access-meta-box',
-				__( 'Visibility', 'leira-access' ),
+				__( 'Access', 'leira-access' ),
 				array( $this, 'render_metabox' ),
 				$screen->post_type,
 				'side',
@@ -204,9 +183,9 @@ class Leira_Access_Admin_Post_Type{
 	 * Save the roles as menu item meta
 	 *
 	 * @return string
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
-	public function update( $menu_id, $menu_item_db_id ) {
+	public function save( $menu_id, $menu_item_db_id ) {
 
 	}
 

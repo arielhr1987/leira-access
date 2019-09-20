@@ -8,7 +8,7 @@
  * @since   1.0.0
  * @uses    Walker_Nav_Menu_Edit
  */
-class Leira_Restrict_content_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit{
+class Leira_Access_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit{
 	/**
 	 * Start the element output.
 	 *
