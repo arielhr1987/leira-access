@@ -4,7 +4,7 @@
  * Custom Walker for Nav Menu Editor
  * Thanks to "Kathy Darling" for this code from "Nav Roles" plugin
  *
- * @package Leira_Restrict_Content
+ * @package Leira_Access
  * @since   1.0.0
  * @uses    Walker_Nav_Menu_Edit
  */

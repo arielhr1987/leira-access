@@ -6,8 +6,8 @@
  * @link       https://github.com/arielhr1987
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/public
+ * @package    Leira_Access
+ * @subpackage Leira_Access/public
  */
 
 /**
@@ -16,8 +16,8 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/public
+ * @package    Leira_Access
+ * @subpackage Leira_Access/public
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Public {

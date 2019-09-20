@@ -5,8 +5,8 @@
  *
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/admin
+ * @package    Leira_Access
+ * @subpackage Leira_Access/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Admin_Taxonomy{
@@ -110,7 +110,7 @@ class Leira_Access_Admin_Taxonomy{
 	 * @return array
 	 */
 	public function custom_column_header( $columns ) {
-		$columns['leira-access'] = 'Visible to';
+		$columns['leira-access'] = __( 'Access', 'leira-access' );
 
 		return $columns;
 	}
@@ -128,7 +128,7 @@ class Leira_Access_Admin_Taxonomy{
 		}
 
 		$access = get_term_meta( $term_id, '_leira-access', true );
-		$output   = __( 'Everyone', 'leira-access' );
+		$output = __( 'Everyone', 'leira-access' );
 
 		if ( $access == 'out' ) {
 			$output = __( 'Logged Out Users', 'leira-access' );
@@ -185,7 +185,7 @@ class Leira_Access_Admin_Taxonomy{
 		?>
         <tr>
             <th scope="row">
-                <label for=""><?php _e( 'Visible to', 'leira-access' ) ?></label>
+                <label for=""><?php _e( 'Access', 'leira-access' ) ?></label>
             </th>
             <td>
 				<?php leira_access()->admin->form( $roles, $tag->term_id, array(
@@ -208,7 +208,7 @@ class Leira_Access_Admin_Taxonomy{
 
 		?>
         <div class="form-field">
-            <label for=""><?php _e( 'Visible to', 'leira-access' ) ?> </label>
+            <label for=""><?php _e( 'Access', 'leira-access' ) ?> </label>
 			<?php leira_access()->admin->form( false, '', array(
 				'show_label' => false
 			) ) ?>

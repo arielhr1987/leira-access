@@ -6,8 +6,8 @@
  * @link       https://github.com/arielhr1987
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/includes
+ * @package    Leira_Access
+ * @subpackage Leira_Access/includes
  */
 
 /**
@@ -17,8 +17,8 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/includes
+ * @package    Leira_Access
+ * @subpackage Leira_Access/includes
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Loader{

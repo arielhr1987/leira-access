@@ -5,8 +5,8 @@
  *
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/admin
+ * @package    Leira_Access
+ * @subpackage Leira_Access/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Admin_Widget{
@@ -36,7 +36,7 @@ class Leira_Access_Admin_Widget{
 		$roles = isset( $instance['_leira-access'] ) ? $instance['_leira-access'] : false;
 
 		leira_access()->admin->form( $roles, $id, array(
-			'label' => __( 'Visible to', 'leira-access' ) . ':'
+			'label' => __( 'Access', 'leira-access' ) . ':'
 		) );
 
 		return array( $widget, $return, $instance );

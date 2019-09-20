@@ -9,8 +9,8 @@
  * @link       https://github.com/arielhr1987
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/includes
+ * @package    Leira_Access
+ * @subpackage Leira_Access/includes
  */
 
 /**
@@ -23,13 +23,13 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/includes
+ * @package    Leira_Access
+ * @subpackage Leira_Access/includes
  * @author     Ariel <arielhr1987@gmail.com>
  *
  * @property Leira_Access_Admin admin
  */
-class Leira_Restrict_Content{
+class Leira_Access{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -311,6 +311,12 @@ class Leira_Restrict_Content{
 		add_action( 'init', array( $this, 'init' ) );
 	}
 
+
+	/**
+	 * Load dependencies and set hooks
+	 *
+	 * @since 1.0.0
+	 */
 	public function init() {
 
 		$this->load_dependencies();

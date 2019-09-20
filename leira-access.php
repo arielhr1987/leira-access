@@ -10,7 +10,7 @@
  *
  * @link              https://github.com/arielhr1987
  * @since             1.0.0
- * @package           Leira_Restrict_Content
+ * @package           Leira_Access
  *
  * @wordpress-plugin
  * Plugin Name:       Leira Access
@@ -55,8 +55,8 @@ function deactivate_leira_access() {
 	Leira_Access_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_leira-access' );
-register_deactivation_hook( __FILE__, 'deactivate_leira-access' );
+register_activation_hook( __FILE__, 'activate_leira_access' );
+register_deactivation_hook( __FILE__, 'deactivate_leira_access' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -67,10 +67,11 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-leira-access.php';
 /**
  * Helper method to get the main instance of the plugin
  *
- * @return Leira_Restrict_Content
+ * @return Leira_Access
+ * @since 1.0.0
  */
 function leira_access() {
-	return Leira_Restrict_Content::instance();
+	return Leira_Access::instance();
 }
 
 /**

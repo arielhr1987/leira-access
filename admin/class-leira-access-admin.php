@@ -6,8 +6,8 @@
  * @link       https://github.com/arielhr1987
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/admin
+ * @package    Leira_Access
+ * @subpackage Leira_Access/admin
  */
 
 /**
@@ -16,8 +16,8 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/admin
+ * @package    Leira_Access
+ * @subpackage Leira_Access/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Admin{
@@ -124,13 +124,13 @@ class Leira_Access_Admin{
 	 * @param string $id
 	 * @param array  $options Possible options are:
 	 *                        'show_label' => true,// show the label
-	 *                        'label'      => __( 'Visible to', 'leira-access' ), //the label to show
+	 *                        'label'      => __( 'Access', 'leira-access' ), //the label to show
 	 *                        'add_nonce'  => true //add nonce or not
 	 */
 	public function form( $roles, $id = '', $options = array() ) {
 		$options = array_merge( array(
 			'show_label' => true,
-			'label'      => __( 'Visible to', 'leira-access' ),
+			'label'      => __( 'Access', 'leira-access' ),
 			'add_nonce'  => true
 		), $options );
 
@@ -215,7 +215,7 @@ class Leira_Access_Admin{
 
                 <div class="leira-access-roles">
                     <p class="">
-						<?php _e( "Restrict item to a minimum role", 'leira-access' ); ?>
+						<?php _e( "Restrict access to a minimum role", 'leira-access' ); ?>
                     </p>
 
 					<?php

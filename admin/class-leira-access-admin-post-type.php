@@ -5,8 +5,8 @@
  *
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/admin
+ * @package    Leira_Access
+ * @subpackage Leira_Access/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Admin_Post_Type{
@@ -76,7 +76,7 @@ class Leira_Access_Admin_Post_Type{
 	 * @return array
 	 */
 	public function custom_column_header( $columns ) {
-		$columns['leira-access'] = 'Visible to';
+		$columns['leira-access'] = __( 'Access', 'leira-access' );
 
 		return $columns;
 	}

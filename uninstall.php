@@ -22,7 +22,7 @@
  * @link       https://github.com/arielhr1987
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
+ * @package    Leira_Access
  */
 
 // If uninstall not called from WordPress, then exit.

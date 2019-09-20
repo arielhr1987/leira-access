@@ -8,8 +8,8 @@
  * @link       https://github.com/arielhr1987
  * @since      1.0.0
  *
- * @package    Leira_Restrict_Content
- * @subpackage Leira_Restrict_Content/public/partials
+ * @package    Leira_Access
+ * @subpackage Leira_Access/public/partials
  */
 ?>
 
