@@ -46,7 +46,8 @@ class Leira_Access_Admin{
 	 * @param string $plugin_name The name of this plugin.
 	 * @param string $version     The version of this plugin.
 	 *
-	 * @since    1.0.0
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function __construct( $plugin_name, $version ) {
 
@@ -73,7 +74,8 @@ class Leira_Access_Admin{
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
-	 * @since    1.0.0
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function enqueue_styles() {
 
@@ -96,7 +98,8 @@ class Leira_Access_Admin{
 	/**
 	 * Register the JavaScript for the admin area.
 	 *
-	 * @since    1.0.0
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function enqueue_scripts() {
 
@@ -126,6 +129,8 @@ class Leira_Access_Admin{
 	 *                        'show_label' => true,// show the label
 	 *                        'label'      => __( 'Access', 'leira-access' ), //the label to show
 	 *                        'add_nonce'  => true //add nonce or not
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function form( $roles, $id = '', $options = array() ) {
 		$options = array_merge( array(
@@ -252,6 +257,8 @@ class Leira_Access_Admin{
 	 * @param bool   $use_post_id Use or not the id post
 	 *
 	 * @return bool
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function save( $id, $type = 'post', $use_post_id = true ) {
 

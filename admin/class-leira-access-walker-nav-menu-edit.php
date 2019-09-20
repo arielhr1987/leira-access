@@ -18,7 +18,9 @@ class Leira_Access_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit{
 	 * @param array  $args   Not used.
 	 * @param int    $id     Not used.
 	 *
-	 * @see Walker_Nav_Menu::start_el()
+	 * @see    Walker_Nav_Menu::start_el()
+	 * @access public
+	 * @since  1.0.0
 	 *
 	 */
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
@@ -45,6 +47,7 @@ class Leira_Access_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit{
 	 * @return string Form fields
 	 * @uses   do_action() Calls 'menu_item_custom_fields' hook
 	 *
+	 * @access protected
 	 * @since  1.0.0
 	 */
 	protected function get_custom_fields( $item, $depth, $args = array(), $id = 0 ) {

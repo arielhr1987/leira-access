@@ -20,6 +20,9 @@ class Leira_Access_Admin_Post_Type{
 
 	/**
 	 * Init
+	 *
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function init() {
 		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
@@ -30,6 +33,8 @@ class Leira_Access_Admin_Post_Type{
 	 * Get all available post types to manage content access
 	 *
 	 * @return array
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function get_post_types() {
 		$post_types = get_post_types( array( 'public' => true, 'show_ui' => true ), 'names' );
@@ -53,6 +58,8 @@ class Leira_Access_Admin_Post_Type{
 	 * @param array $columns List of available columns
 	 *
 	 * @return array
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function custom_column_header( $columns ) {
 		$columns['leira-access'] = __( 'Access', 'leira-access' );
@@ -65,6 +72,9 @@ class Leira_Access_Admin_Post_Type{
 	 *
 	 * @param string $column_name The column name
 	 * @param int    $post_id     The id of the post
+	 *
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function custom_column_content( $column_name, $post_id ) {
 		if ( 'leira-access' != $column_name ) {
@@ -90,6 +100,9 @@ class Leira_Access_Admin_Post_Type{
 
 	/**
 	 * Add metabox to posts
+	 *
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function add_metabox() {
 
@@ -122,6 +135,7 @@ class Leira_Access_Admin_Post_Type{
 	 *
 	 * @param WP_Post $item
 	 *
+	 * @access public
 	 * @since  1.0.0
 	 */
 	public function render_metabox( $item ) {
@@ -134,10 +148,13 @@ class Leira_Access_Admin_Post_Type{
 	}
 
 	/**
-	 * Add interface to bulk edit form
+	 * Add form to bulk edit form
 	 *
 	 * @param $column_name
 	 * @param $post_type
+	 *
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function bulk_edit_custom_box( $column_name, $post_type ) {
 		$post_types = $this->get_post_types();
@@ -157,10 +174,13 @@ class Leira_Access_Admin_Post_Type{
 	}
 
 	/**
-	 * Add interface to quick edit form
+	 * Add form to quick edit
 	 *
 	 * @param $column_name
 	 * @param $post_type
+	 *
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
 		$post_types = $this->get_post_types();
@@ -183,7 +203,7 @@ class Leira_Access_Admin_Post_Type{
 	 * Save the roles as menu item meta
 	 *
 	 * @return string
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public function save( $menu_id, $menu_item_db_id ) {
 
@@ -195,6 +215,8 @@ class Leira_Access_Admin_Post_Type{
 	 * @param integer $post_id The post we are saving
 	 *
 	 * @return mixed
+	 * @access public
+	 * @since  1.0.0
 	 */
 	function save_quick_edit_data( $post_id ) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {

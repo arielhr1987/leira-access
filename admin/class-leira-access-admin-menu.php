@@ -21,7 +21,8 @@ class Leira_Access_Admin_Menu{
 	 * Override default Admin Menu Walker.
 	 * This could generate some interference with other plugins using the same technique to handle menu items edition
 	 *
-	 * @since 1.0
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function edit_nav_menu_walker( $walker, $menu_id ) {
 		$class = 'Leira_Access_Walker_Nav_Menu_Edit';
@@ -40,6 +41,7 @@ class Leira_Access_Admin_Menu{
 	 * @params obj $item - the menu item
 	 * @params array $args
 	 *
+	 * @access public
 	 * @since  1.0.0
 	 */
 	public function form( $item_id, $item, $depth, $args ) {
@@ -58,7 +60,8 @@ class Leira_Access_Admin_Menu{
 	 * @param integer $menu_item_db_id The database menu item id
 	 *
 	 * @return string
-	 * @since 1.0.0
+	 * @access public
+	 * @since  1.0.0
 	 */
 	public function update_nav_menu_item( $menu_id, $menu_item_db_id ) {
 		leira_access()->admin->save( $menu_item_db_id );
