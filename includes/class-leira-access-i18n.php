@@ -24,7 +24,7 @@
  * @subpackage Leira_Restrict_Content/includes
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_i18n{
+class Leira_Access_i18n{
 
 	/**
 	 * Load the plugin text domain for translation.
@@ -34,7 +34,7 @@ class Leira_Restrict_Content_i18n{
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'leira-restrict-content',
+			'leira-access',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

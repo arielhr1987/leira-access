@@ -27,7 +27,7 @@
  * @subpackage Leira_Restrict_Content/includes
  * @author     Ariel <arielhr1987@gmail.com>
  *
- * @property Leira_Restrict_Content_Admin admin
+ * @property Leira_Access_Admin admin
  */
 class Leira_Restrict_Content{
 
@@ -37,7 +37,7 @@ class Leira_Restrict_Content{
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Leira_Restrict_Content_Loader $loader Maintains and registers all hooks for the plugin.
+	 * @var      Leira_Access_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -94,7 +94,7 @@ class Leira_Restrict_Content{
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'leira-restrict-content';
+		$this->plugin_name = 'leira-access';
 
 	}
 
@@ -103,10 +103,10 @@ class Leira_Restrict_Content{
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Leira_Restrict_Content_Loader. Orchestrates the hooks of the plugin.
-	 * - Leira_Restrict_Content_i18n. Defines internationalization functionality.
-	 * - Leira_Restrict_Content_Admin. Defines all hooks for the admin area.
-	 * - Leira_Restrict_Content_Public. Defines all hooks for the public side of the site.
+	 * - Leira_Access_Loader. Orchestrates the hooks of the plugin.
+	 * - Leira_Access_i18n. Defines internationalization functionality.
+	 * - Leira_Access_Admin. Defines all hooks for the admin area.
+	 * - Leira_Access_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -120,66 +120,66 @@ class Leira_Restrict_Content{
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-restrict-content-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-access-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-restrict-content-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-access-i18n.php';
 
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 
 			/**
 			 * The class responsible for defining all actions that occur in the admin area.
 			 */
-			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin.php';
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin.php';
 
 			/**
 			 * Nav Menu
 			 */
-			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-menu.php';
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin-menu.php';
 
 			/**
 			 * Widgets
 			 */
-			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-widget.php';
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin-widget.php';
 
 			/**
 			 * Posts
 			 */
-			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-post-type.php';
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin-post-type.php';
 
 			/**
 			 * Taxonomies
 			 */
-			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-restrict-content-admin-taxonomy.php';
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin-taxonomy.php';
 		}
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-restrict-content-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-access-public.php';
 
 		/**
 		 * Nav Menu
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-restrict-content-public-menu.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-access-public-menu.php';
 
-		$this->loader = new Leira_Restrict_Content_Loader();
+		$this->loader = new Leira_Access_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Leira_Restrict_Content_i18n class in order to set the domain and to register the hook with WordPress.
+	 * Uses the Leira_Access_i18n class in order to set the domain and to register the hook with WordPress.
 	 *
 	 * @since    1.0.0
 	 * @access   private
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Leira_Restrict_Content_i18n();
+		$plugin_i18n = new Leira_Access_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -195,7 +195,7 @@ class Leira_Restrict_Content{
 
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 
-			$plugin_admin = new Leira_Restrict_Content_Admin( $this->get_plugin_name(), $this->get_version() );
+			$plugin_admin = new Leira_Access_Admin( $this->get_plugin_name(), $this->get_version() );
 
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 
@@ -207,7 +207,7 @@ class Leira_Restrict_Content{
 			/**
 			 * Nav Menu
 			 */
-			$plugin_admin_menu = new Leira_Restrict_Content_Admin_Menu();
+			$plugin_admin_menu = new Leira_Access_Admin_Menu();
 
 			//Use custom admin walker.
 			$this->loader->add_filter( 'wp_edit_nav_menu_walker', $plugin_admin_menu, 'edit_nav_menu_walker', 10, 2 );
@@ -224,7 +224,7 @@ class Leira_Restrict_Content{
 			/**
 			 * Widgets
 			 */
-			$plugin_admin_widget = new Leira_Restrict_Content_Admin_Widget();
+			$plugin_admin_widget = new Leira_Access_Admin_Widget();
 
 			$this->loader->add_action( 'in_widget_form', $plugin_admin_widget, 'form', 20, 3 );
 
@@ -235,7 +235,7 @@ class Leira_Restrict_Content{
 			/**
 			 * Posts
 			 */
-			$plugin_admin_post_type = new Leira_Restrict_Content_Admin_Post_Type();
+			$plugin_admin_post_type = new Leira_Access_Admin_Post_Type();
 
 			//Add meta-box to post edit page
 			$this->loader->add_action( 'load-post.php', $plugin_admin_post_type, 'init' );
@@ -259,7 +259,7 @@ class Leira_Restrict_Content{
 			/**
 			 * Taxonomies
 			 */
-			$plugin_admin_taxonomy = new Leira_Restrict_Content_Admin_Taxonomy();
+			$plugin_admin_taxonomy = new Leira_Access_Admin_Taxonomy();
 
 			//register filters and actions to add custom columns
 			//$this->loader->add_action( 'current_screen', $plugin_admin_taxonomy, 'current_screen' );
@@ -279,7 +279,7 @@ class Leira_Restrict_Content{
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Leira_Restrict_Content_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Leira_Access_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -289,7 +289,7 @@ class Leira_Restrict_Content{
 		/**
 		 * Nav Menu
 		 */
-		$plugin_public_menu = new Leira_Restrict_Content_Public_Menu();
+		$plugin_public_menu = new Leira_Access_Public_Menu();
 
 		//Add metadata to menu items
 		$this->loader->add_filter( 'wp_setup_nav_menu_item', $plugin_public_menu, 'setup_nav_menu_item' );
@@ -335,7 +335,7 @@ class Leira_Restrict_Content{
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @return    Leira_Restrict_Content_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Leira_Access_Loader    Orchestrates the hooks of the plugin.
 	 * @since     1.0.0
 	 */
 	public function get_loader() {

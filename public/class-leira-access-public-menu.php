@@ -12,7 +12,7 @@
  * @subpackage Leira_Restrict_Content/public
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Public_Menu{
+class Leira_Access_Public_Menu{
 
 	/**
 	 * Constructor.
@@ -30,7 +30,7 @@ class Leira_Restrict_Content_Public_Menu{
 	 */
 	public function setup_nav_menu_item( $menu_item ) {
 		if ( isset( $menu_item->ID ) ) {
-			$roles = get_post_meta( $menu_item->ID, '_leira-restrict-content', true );
+			$roles = get_post_meta( $menu_item->ID, '_leira-access', true );
 			if ( ! empty( $roles ) ) {
 				$menu_item->roles = $roles;
 			}
@@ -80,7 +80,7 @@ class Leira_Restrict_Content_Public_Menu{
 	 * @return bool
 	 */
 	public function filter_menu_item_visible( $item, $visible ) {
-		$main = leira_restrict_content();
+		$main = leira_access();
 		if ( $main->is_request( 'frontend' ) and $visible ) {
 			if ( $item->post_title == 'Google' ) {
 				$visible = false;

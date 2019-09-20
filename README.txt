@@ -1,4 +1,4 @@
-=== Leira Restrict Content ===
+=== Leira Access ===
 Contributors: arielhr1987
 Donate link: https://github.com/arielhr1987
 Tags: users, content, restrict, access, widgets, nav, blocks, access
@@ -43,7 +43,7 @@ This section describes how to install the plugin and get it working.
 
 e.g.
 
-1. Upload `leira-restrict-content.php` to the `/wp-content/plugins/` directory
+1. Upload `leira-access.php` to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
 

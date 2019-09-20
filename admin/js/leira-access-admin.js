@@ -146,54 +146,54 @@
 //     var CheckboxControl = wp.components.CheckboxControl;
 //
 //     var PluginPostStatusInfoTest = function PluginPostStatusInfoTest() {
-//         var content = '<div class="leira-restrict-content-container">' +
+//         var content = '<div class="leira-access-container">' +
 //             '            <p class="">' +
 //             'Visible to:            </p>' +
 //             '' +
-//             '            <input type="hidden" name="leira-restrict-content-nonce" value="80b4bbb1fb">' +
+//             '            <input type="hidden" name="leira-access-nonce" value="80b4bbb1fb">' +
 //             '' +
-//             '            <input type="hidden" class="leira-restrict-content-item-id" value="meta-2">' +
+//             '            <input type="hidden" class="leira-access-item-id" value="meta-2">' +
 //             '' +
-//             '            <input type="radio" class="leira-restrict-content-status" name="leira-restrict-content-status[meta-2]" id="leira-restrict-content-for-meta-2" checked="checked" value="">' +
-//             '            <label for="leira-restrict-content-for-meta-2">' +
+//             '            <input type="radio" class="leira-access-status" name="leira-access-status[meta-2]" id="leira-access-for-meta-2" checked="checked" value="">' +
+//             '            <label for="leira-access-for-meta-2">' +
 //             'Everyone            </label>' +
 //             '            <br>' +
 //             '' +
-//             '            <input type="radio" class="leira-restrict-content-status" name="leira-restrict-content-status[meta-2]" id="leira-restrict-content-out-for-meta-2" value="out">' +
-//             '            <label for="leira-restrict-content-out-for-meta-2">' +
+//             '            <input type="radio" class="leira-access-status" name="leira-access-status[meta-2]" id="leira-access-out-for-meta-2" value="out">' +
+//             '            <label for="leira-access-out-for-meta-2">' +
 //             'Logged Out Users            </label>' +
 //             '            <br>' +
 //             '' +
-//             '            <input type="radio" class="leira-restrict-content-status" name="leira-restrict-content-status[meta-2]" id="leira-restrict-content-in-for-meta-2" value="in">' +
-//             '            <label for="leira-restrict-content-in-for-meta-2">' +
+//             '            <input type="radio" class="leira-access-status" name="leira-access-status[meta-2]" id="leira-access-in-for-meta-2" value="in">' +
+//             '            <label for="leira-access-in-for-meta-2">' +
 //             'Logged In Users            </label>' +
 //             '' +
-//             '            <div class="leira-restrict-content-roles">' +
+//             '            <div class="leira-access-roles">' +
 //             '                <p class="">' +
 //             'Restrict item to a minimum role                </p>' +
 //             '' +
-//             '                    <input type="checkbox" name="leira-restrict-content-role[meta-2][1]" id="leira-restrict-content-administrator-for-meta-2" value="administrator">' +
-//             '                    <label for="leira-restrict-content-administrator-for-meta-2">' +
+//             '                    <input type="checkbox" name="leira-access-role[meta-2][1]" id="leira-access-administrator-for-meta-2" value="administrator">' +
+//             '                    <label for="leira-access-administrator-for-meta-2">' +
 //             'Administrator                    </label>' +
 //             '                    <br>' +
 //             '' +
-//             '                    <input type="checkbox" name="leira-restrict-content-role[meta-2][2]" id="leira-restrict-content-editor-for-meta-2" value="editor">' +
-//             '                    <label for="leira-restrict-content-editor-for-meta-2">' +
+//             '                    <input type="checkbox" name="leira-access-role[meta-2][2]" id="leira-access-editor-for-meta-2" value="editor">' +
+//             '                    <label for="leira-access-editor-for-meta-2">' +
 //             'Editor                    </label>' +
 //             '                    <br>' +
 //             '' +
-//             '                    <input type="checkbox" name="leira-restrict-content-role[meta-2][3]" id="leira-restrict-content-author-for-meta-2" value="author">' +
-//             '                    <label for="leira-restrict-content-author-for-meta-2">' +
+//             '                    <input type="checkbox" name="leira-access-role[meta-2][3]" id="leira-access-author-for-meta-2" value="author">' +
+//             '                    <label for="leira-access-author-for-meta-2">' +
 //             'Author                    </label>' +
 //             '                    <br>' +
 //             '' +
-//             '                    <input type="checkbox" name="leira-restrict-content-role[meta-2][4]" id="leira-restrict-content-contributor-for-meta-2" value="contributor">' +
-//             '                    <label for="leira-restrict-content-contributor-for-meta-2">' +
+//             '                    <input type="checkbox" name="leira-access-role[meta-2][4]" id="leira-access-contributor-for-meta-2" value="contributor">' +
+//             '                    <label for="leira-access-contributor-for-meta-2">' +
 //             'Contributor                    </label>' +
 //             '                    <br>' +
 //             '' +
-//             '                    <input type="checkbox" name="leira-restrict-content-role[meta-2][5]" id="leira-restrict-content-subscriber-for-meta-2" value="subscriber">' +
-//             '                    <label for="leira-restrict-content-subscriber-for-meta-2">' +
+//             '                    <input type="checkbox" name="leira-access-role[meta-2][5]" id="leira-access-subscriber-for-meta-2" value="subscriber">' +
+//             '                    <label for="leira-access-subscriber-for-meta-2">' +
 //             'Subscriber                    </label>' +
 //             '                    <br>' +
 //             '' +
@@ -202,7 +202,7 @@
 //             '        </div>';
 //
 //         content = el('div', {
-//                 className: 'leira-restrict-content-container',
+//                 className: 'leira-access-container',
 //             },
 //             [el('p', {}, 'Visible to:')]);
 //         return el(PluginPostStatusInfo, {}, content);

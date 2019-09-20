@@ -9,7 +9,7 @@
  * @subpackage Leira_Restrict_Content/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Admin_Post_Type{
+class Leira_Access_Admin_Post_Type{
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ class Leira_Restrict_Content_Admin_Post_Type{
 	}
 
 	/**
-	 * Get all available post types to manage content restrictions
+	 * Get all available post types to manage content access
 	 *
 	 * @return array
 	 */
 	public function get_post_types() {
 		$post_types = get_post_types( array( 'public' => true, 'show_ui' => true ), 'names' );
 
-		$exclude = apply_filters( 'leira_restrict_content_excluded_post_types', array(
+		$exclude = apply_filters( 'leira-access_excluded_post_types', array(
 			'forum',
 			'topic',
 			'reply',
@@ -76,7 +76,7 @@ class Leira_Restrict_Content_Admin_Post_Type{
 	 * @return array
 	 */
 	public function custom_column_header( $columns ) {
-		$columns['leira-restrict-content'] = 'Visible to';
+		$columns['leira-access'] = 'Visible to';
 
 		return $columns;
 	}
@@ -88,21 +88,21 @@ class Leira_Restrict_Content_Admin_Post_Type{
 	 * @param int    $post_id     The id of the post
 	 */
 	public function custom_column_content( $column_name, $post_id ) {
-		if ( 'leira-restrict-content' != $column_name ) {
+		if ( 'leira-access' != $column_name ) {
 			return;
 		}
 
-		$restrict = get_post_meta( $post_id, '_leira-restrict-content', true );
-		$output   = __( 'Everyone', 'leira-restrict-content' );
+		$access = get_post_meta( $post_id, '_leira-access', true );
+		$output   = __( 'Everyone', 'leira-access' );
 
-		if ( $restrict == 'out' ) {
-			$output = __( 'Logged Out Users', 'leira-restrict-content' );
+		if ( $access == 'out' ) {
+			$output = __( 'Logged Out Users', 'leira-access' );
 		} else {
 			//is "in" or array of roles
-			if ( $restrict == 'in' ) {
-				$output = __( 'Logged In Users', 'leira-restrict-content' );
-			} else if ( is_array( $restrict ) ) {
-				$output = __( 'Logged In Users with Roles', 'leira-restrict-content' );
+			if ( $access == 'in' ) {
+				$output = __( 'Logged In Users', 'leira-access' );
+			} else if ( is_array( $access ) ) {
+				$output = __( 'Logged In Users with Roles', 'leira-access' );
 			}
 		}
 
@@ -122,8 +122,8 @@ class Leira_Restrict_Content_Admin_Post_Type{
 
 		if ( $screen && ! empty( $screen->post_type ) && in_array( $screen->post_type, $post_types ) ) {
 			add_meta_box(
-				'leira-restrict-content-meta-box',
-				__( 'Visibility', 'leira-restrict-content' ),
+				'leira-access-meta-box',
+				__( 'Visibility', 'leira-access' ),
 				array( $this, 'render_metabox' ),
 				$screen->post_type,
 				'side',
@@ -148,8 +148,8 @@ class Leira_Restrict_Content_Admin_Post_Type{
 	public function render_metabox( $item ) {
 
 		$id    = isset( $item->ID ) ? $item->ID : false;
-		$roles = get_post_meta( $id, '_leira-restrict-content', true );
-		leira_restrict_content()->admin->form( $roles, $id, array(
+		$roles = get_post_meta( $id, '_leira-access', true );
+		leira_access()->admin->form( $roles, $id, array(
 			'show_label' => false
 		) );
 	}
@@ -162,7 +162,7 @@ class Leira_Restrict_Content_Admin_Post_Type{
 	 */
 	public function bulk_edit_custom_box( $column_name, $post_type ) {
 		$post_types = $this->get_post_types();
-		if ( 'leira-restrict-content' != $column_name || ! in_array( $post_type, $post_types ) ) {
+		if ( 'leira-access' != $column_name || ! in_array( $post_type, $post_types ) ) {
 			return;
 		}
 
@@ -171,7 +171,7 @@ class Leira_Restrict_Content_Admin_Post_Type{
 		?>
         <div class="">
             <div class="inline-edit-col">
-				<?php leira_restrict_content()->admin->form( $roles, $id ); ?>
+				<?php leira_access()->admin->form( $roles, $id ); ?>
             </div>
         </div>
 		<?php
@@ -185,7 +185,7 @@ class Leira_Restrict_Content_Admin_Post_Type{
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
 		$post_types = $this->get_post_types();
-		if ( 'leira-restrict-content' != $column_name || ! in_array( $post_type, $post_types ) ) {
+		if ( 'leira-access' != $column_name || ! in_array( $post_type, $post_types ) ) {
 			return;
 		}
 
@@ -194,7 +194,7 @@ class Leira_Restrict_Content_Admin_Post_Type{
 		?>
         <fieldset class="inline-edit-col-left">
             <div class="inline-edit-col">
-				<?php leira_restrict_content()->admin->form( $roles, $id ); ?>
+				<?php leira_access()->admin->form( $roles, $id ); ?>
             </div>
         </fieldset>
 		<?php

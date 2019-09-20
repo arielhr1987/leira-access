@@ -9,7 +9,7 @@
  * @subpackage Leira_Restrict_Content/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Admin_Taxonomy{
+class Leira_Access_Admin_Taxonomy{
 
 	/**
 	 * Constructor.
@@ -61,7 +61,7 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	public function get_taxonomies() {
 		$taxonomies = get_taxonomies( array( 'public' => true, 'show_ui' => true ), 'names' );
 
-		$exclude = apply_filters( 'leira_restrict_content_excluded_taxonomies', array() );
+		$exclude = apply_filters( 'leira-access_excluded_taxonomies', array() );
 
 		$taxonomies = array_diff( $taxonomies, $exclude );
 
@@ -110,7 +110,7 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	 * @return array
 	 */
 	public function custom_column_header( $columns ) {
-		$columns['leira-restrict-content'] = 'Visible to';
+		$columns['leira-access'] = 'Visible to';
 
 		return $columns;
 	}
@@ -123,29 +123,29 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	 * @param int    $term_id     Term ID.
 	 */
 	public function custom_column_content( $string, $column_name, $term_id ) {
-		if ( 'leira-restrict-content' != $column_name ) {
+		if ( 'leira-access' != $column_name ) {
 			return;
 		}
 
-		$restrict = get_term_meta( $term_id, '_leira-restrict-content', true );
-		$output   = __( 'Everyone', 'leira-restrict-content' );
+		$access = get_term_meta( $term_id, '_leira-access', true );
+		$output   = __( 'Everyone', 'leira-access' );
 
-		if ( $restrict == 'out' ) {
-			$output = __( 'Logged Out Users', 'leira-restrict-content' );
+		if ( $access == 'out' ) {
+			$output = __( 'Logged Out Users', 'leira-access' );
 		} else {
 			//is "in" or array of roles
-			if ( $restrict == 'in' ) {
-				$output = __( 'Logged In Users', 'leira-restrict-content' );
-			} else if ( is_array( $restrict ) ) {
+			if ( $access == 'in' ) {
+				$output = __( 'Logged In Users', 'leira-access' );
+			} else if ( is_array( $access ) ) {
 				$roles = '';
-				if ( ! empty( $restrict ) ) {
+				if ( ! empty( $access ) ) {
 					$roles .= '<ul>';
-					foreach ( $restrict as $role ) {
+					foreach ( $access as $role ) {
 						$roles .= sprintf( '<li>%s</li>', $role );
 					}
 					$roles .= '</ul>';
 				}
-				$output = sprintf( __( 'Logged In Users %s', 'leira-restrict-content' ), $roles );
+				$output = sprintf( __( 'Logged In Users %s', 'leira-access' ), $roles );
 			}
 		}
 
@@ -159,7 +159,7 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	 * @param string $post_type
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
-		if ( 'leira-restrict-content' != $column_name ) {
+		if ( 'leira-access' != $column_name ) {
 			return;
 		}
 
@@ -168,7 +168,7 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 		?>
         <fieldset class="">
             <div class="inline-edit-col">
-				<?php leira_restrict_content()->admin->form( $roles, $id ); ?>
+				<?php leira_access()->admin->form( $roles, $id ); ?>
             </div>
         </fieldset>
 		<?php
@@ -180,15 +180,15 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	 * @param $tag
 	 */
 	public function edit_form_fields( $tag ) {
-		$roles = get_term_meta( $tag->term_id, '_leira-restrict-content', true );
+		$roles = get_term_meta( $tag->term_id, '_leira-access', true );
 
 		?>
         <tr>
             <th scope="row">
-                <label for=""><?php _e( 'Visible to', 'leira-restrict-content' ) ?></label>
+                <label for=""><?php _e( 'Visible to', 'leira-access' ) ?></label>
             </th>
             <td>
-				<?php leira_restrict_content()->admin->form( $roles, $tag->term_id, array(
+				<?php leira_access()->admin->form( $roles, $tag->term_id, array(
 					'show_label' => false
 				) ) ?>
                 <p class="description">
@@ -208,8 +208,8 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 
 		?>
         <div class="form-field">
-            <label for=""><?php _e( 'Visible to', 'leira-restrict-content' ) ?> </label>
-			<?php leira_restrict_content()->admin->form( false, '', array(
+            <label for=""><?php _e( 'Visible to', 'leira-access' ) ?> </label>
+			<?php leira_access()->admin->form( false, '', array(
 				'show_label' => false
 			) ) ?>
             <p class="">
@@ -225,7 +225,7 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	 * @param $term_id
 	 */
 	public function edit( $term_id ) {
-		leira_restrict_content()->admin->save( $term_id, 'term' );
+		leira_access()->admin->save( $term_id, 'term' );
 	}
 
 	/**
@@ -234,7 +234,7 @@ class Leira_Restrict_Content_Admin_Taxonomy{
 	 * @param $term_id
 	 */
 	public function save( $term_id ) {
-		leira_restrict_content()->admin->save( $term_id, 'term', false );
+		leira_access()->admin->save( $term_id, 'term', false );
 	}
 
 }

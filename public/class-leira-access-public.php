@@ -20,7 +20,7 @@
  * @subpackage Leira_Restrict_Content/public
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Public {
+class Leira_Access_Public {
 
 	/**
 	 * The ID of this plugin.
@@ -65,15 +65,15 @@ class Leira_Restrict_Content_Public {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Leira_Restrict_Content_Loader as all of the hooks are defined
+		 * defined in Leira_Access_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Leira_Restrict_Content_Loader will then create the relationship
+		 * The Leira_Access_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/leira-restrict-content-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/leira-access-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -88,15 +88,15 @@ class Leira_Restrict_Content_Public {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Leira_Restrict_Content_Loader as all of the hooks are defined
+		 * defined in Leira_Access_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Leira_Restrict_Content_Loader will then create the relationship
+		 * The Leira_Access_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-restrict-content-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-access-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 

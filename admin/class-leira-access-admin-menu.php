@@ -9,7 +9,7 @@
  * @subpackage Leira_Restrict_Content/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Admin_Menu{
+class Leira_Access_Admin_Menu{
 	/**
 	 * Constructor.
 	 */
@@ -24,10 +24,10 @@ class Leira_Restrict_Content_Admin_Menu{
 	 * @since 1.0
 	 */
 	public function edit_nav_menu_walker( $walker, $menu_id ) {
-		$class = 'Leira_Restrict_Content_Walker_Nav_Menu_Edit';
+		$class = 'Leira_Access_Walker_Nav_Menu_Edit';
 		if ( ! class_exists( $class ) ) {
 			//
-			require_once( plugin_dir_path( __FILE__ ) . '/class-leira-restrict-content-walker-nav-menu-edit.php' );
+			require_once( plugin_dir_path( __FILE__ ) . '/class-leira-access-walker-nav-menu-edit.php' );
 		}
 
 		return $class;
@@ -44,9 +44,9 @@ class Leira_Restrict_Content_Admin_Menu{
 	 */
 	public function form( $item_id, $item, $depth, $args ) {
 		//new approach
-		$roles = get_post_meta( $item->ID, '_leira-restrict-content', true );
+		$roles = get_post_meta( $item->ID, '_leira-access', true );
 		$id    = isset( $item->ID ) ? $item->ID : false;
-		leira_restrict_content()->admin->form( $roles, $id );
+		leira_access()->admin->form( $roles, $id );
 
 		return;
 	}
@@ -61,7 +61,7 @@ class Leira_Restrict_Content_Admin_Menu{
 	 * @since 1.0.0
 	 */
 	public function update_nav_menu_item( $menu_id, $menu_item_db_id ) {
-		leira_restrict_content()->admin->save( $menu_item_db_id );
+		leira_access()->admin->save( $menu_item_db_id );
 
 		return true;
 	}

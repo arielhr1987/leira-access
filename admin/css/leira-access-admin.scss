@@ -3,7 +3,7 @@
  * included in this file.
  */
 
-.leira-restrict-content-container {
+.leira-access-container {
   margin: 1em 0;
   font-size: 13px;
   line-height: 1.5;
@@ -21,7 +21,7 @@
     margin-top: 0;
   }
 
-  div.leira-restrict-content-roles {
+  div.leira-access-roles {
     display: none;
     margin-left: 20px;
 
@@ -33,13 +33,13 @@
   }
 }
 
-input.leira-restrict-content-status:checked + label + div.leira-restrict-content-roles {
+input.leira-access-status:checked + label + div.leira-access-roles {
   display: block;
 }
 
 //Menu Items
 .menu-item-settings {
-  .leira-restrict-content-container {
+  .leira-access-container {
     > p {
       color: #666;
       font-style: italic;
@@ -49,7 +49,7 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
 
 //Taxonomy form
 #addtag {
-  .leira-restrict-content-container {
+  .leira-access-container {
     margin: 0;
 
     label {
@@ -61,7 +61,7 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
 }
 
 #edittag {
-  .leira-restrict-content-container {
+  .leira-access-container {
     margin: 0;
   }
 }
@@ -69,7 +69,7 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
 
 //quick edit mode
 .inline-edit-row {
-  .leira-restrict-content-container {
+  .leira-access-container {
 
     > p {
       font-style: italic;
@@ -87,7 +87,7 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
 
 //tables
 .wp-list-table {
-  .column-leira-restrict-content {
+  .column-leira-access {
     width: 10em;
 
     ul, li {
@@ -97,7 +97,7 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
 
   //Posts & Taxonomies
   &.tags, &.posts {
-    .leira-restrict-content-container {
+    .leira-access-container {
       display: block;
       //margin: .2em 0;
       margin: 0;
@@ -112,7 +112,7 @@ input.leira-restrict-content-status:checked + label + div.leira-restrict-content
         margin: 0;
       }
 
-      > .leira-restrict-content-controls {
+      > .leira-access-controls {
         display: block;
         margin-left: 6em;
       }

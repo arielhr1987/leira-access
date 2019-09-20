@@ -20,7 +20,7 @@
  * @subpackage Leira_Restrict_Content/includes
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Activator {
+class Leira_Access_Activator {
 
 	/**
 	 * Short Description. (use period)

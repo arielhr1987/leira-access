@@ -13,15 +13,15 @@
  * @package           Leira_Restrict_Content
  *
  * @wordpress-plugin
- * Plugin Name:       Leira Restrict Content
- * Plugin URI:        leira-restrict-content
+ * Plugin Name:       Leira Access
+ * Plugin URI:        leira-access
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0
  * Author:            Ariel
  * Author URI:        https://github.com/arielhr1987
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       leira-restrict-content
+ * Text Domain:       leira-access
  * Domain Path:       /languages
  */
 
@@ -35,41 +35,41 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'LEIRA_RESTRICT_CONTENT_VERSION', '1.0.0' );
+define( 'LEIRA_ACCESS_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-leira-restrict-content-activator.php
+ * This action is documented in includes/class-leira-access-activator.php
  */
-function activate_leira_restrict_content() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-leira-restrict-content-activator.php';
-	Leira_Restrict_Content_Activator::activate();
+function activate_leira_access() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-leira-access-activator.php';
+	Leira_Access_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-leira-restrict-content-deactivator.php
+ * This action is documented in includes/class-leira-access-deactivator.php
  */
-function deactivate_leira_restrict_content() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-leira-restrict-content-deactivator.php';
-	Leira_Restrict_Content_Deactivator::deactivate();
+function deactivate_leira_access() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-leira-access-deactivator.php';
+	Leira_Access_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_leira_restrict_content' );
-register_deactivation_hook( __FILE__, 'deactivate_leira_restrict_content' );
+register_activation_hook( __FILE__, 'activate_leira-access' );
+register_deactivation_hook( __FILE__, 'deactivate_leira-access' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-leira-restrict-content.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-leira-access.php';
 
 /**
  * Helper method to get the main instance of the plugin
  *
  * @return Leira_Restrict_Content
  */
-function leira_restrict_content() {
+function leira_access() {
 	return Leira_Restrict_Content::instance();
 }
 
@@ -82,4 +82,4 @@ function leira_restrict_content() {
  *
  * @since    1.0.0
  */
-leira_restrict_content()->run();
+leira_access()->run();

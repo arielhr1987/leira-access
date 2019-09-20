@@ -21,7 +21,7 @@
  * @subpackage Leira_Restrict_Content/includes
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Loader{
+class Leira_Access_Loader{
 
 	/**
 	 * The array of actions registered with WordPress.

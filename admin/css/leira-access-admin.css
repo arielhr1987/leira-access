@@ -1,0 +1,69 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+.leira-access-container {
+  margin: 1em 0;
+  font-size: 13px;
+  line-height: 1.5;
+  vertical-align: middle; }
+  .leira-access-container > p {
+    margin: 5px 0 0 0; }
+  .leira-access-container input[type="checkbox"] {
+    margin-top: 0; }
+  .leira-access-container input[type="radio"] {
+    margin-top: 0; }
+  .leira-access-container div.leira-access-roles {
+    display: none;
+    margin-left: 20px; }
+    .leira-access-container div.leira-access-roles > p {
+      margin: 0;
+      font-style: italic;
+      color: #666; }
+
+input.leira-access-status:checked + label + div.leira-access-roles {
+  display: block; }
+
+.menu-item-settings .leira-access-container > p {
+  color: #666;
+  font-style: italic; }
+
+#addtag .leira-access-container {
+  margin: 0; }
+  #addtag .leira-access-container label {
+    display: inline-block;
+    padding: 0;
+    vertical-align: middle; }
+
+#edittag .leira-access-container {
+  margin: 0; }
+
+.inline-edit-row .leira-access-container > p {
+  font-style: italic;
+  margin: 5px 0 0 0;
+  color: #555; }
+.inline-edit-row .leira-access-container label {
+  display: inline-block;
+  line-height: 1.5;
+  margin: 0; }
+
+.wp-list-table .column-leira-access {
+  width: 10em; }
+  .wp-list-table .column-leira-access ul, .wp-list-table .column-leira-access li {
+    margin: 0; }
+.wp-list-table.tags .leira-access-container, .wp-list-table.posts .leira-access-container {
+  display: block;
+  margin: 0;
+  line-height: 1.5; }
+  .wp-list-table.tags .leira-access-container > p, .wp-list-table.posts .leira-access-container > p {
+    display: block;
+    float: left;
+    width: 6em;
+    line-height: 2.5;
+    font-size: 12px;
+    margin: 0; }
+  .wp-list-table.tags .leira-access-container > .leira-access-controls, .wp-list-table.posts .leira-access-container > .leira-access-controls {
+    display: block;
+    margin-left: 6em; }
+
+/*# sourceMappingURL=leira-access-admin.css.map */

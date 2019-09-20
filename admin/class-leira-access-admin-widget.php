@@ -9,7 +9,7 @@
  * @subpackage Leira_Restrict_Content/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Restrict_Content_Admin_Widget{
+class Leira_Access_Admin_Widget{
 	/**
 	 * Constructor.
 	 */
@@ -33,10 +33,10 @@ class Leira_Restrict_Content_Admin_Widget{
 	public function form( $widget, $return, $instance ) {
 
 		$id    = isset( $widget->id ) ? $widget->id : false;
-		$roles = isset( $instance['_leira-restrict-content'] ) ? $instance['_leira-restrict-content'] : false;
+		$roles = isset( $instance['_leira-access'] ) ? $instance['_leira-access'] : false;
 
-		leira_restrict_content()->admin->form( $roles, $id, array(
-			'label' => __( 'Visible to', 'leira-restrict-content' ) . ':'
+		leira_access()->admin->form( $roles, $id, array(
+			'label' => __( 'Visible to', 'leira-access' ) . ':'
 		) );
 
 		return array( $widget, $return, $instance );
@@ -54,8 +54,8 @@ class Leira_Restrict_Content_Admin_Widget{
 	 * @since 1.0.0
 	 */
 	public function update( $instance, $new_instance, $old_instance, $widget ) {
-		$save                                    = leira_restrict_content()->admin->save( $widget->id, 'widget' );
-		$new_instance['_leira-restrict-content'] = $save;
+		$save                                    = leira_access()->admin->save( $widget->id, 'widget' );
+		$new_instance['_leira-access'] = $save;
 
 		return $new_instance;
 	}
