@@ -277,6 +277,9 @@ class Leira_Access{
 				//custom column header
 				$this->loader->add_filter( "manage_edit-{$taxonomy}_columns", $plugin_admin_taxonomy, 'custom_column_header', 10 );
 
+				//add sortable columns
+				//$this->loader->add_filter( "manage_edit-{$taxonomy}_sortable_columns", $plugin_admin_taxonomy, 'custom_column_sortable', 10 );
+
 				//custom column content
 				$this->loader->add_action( "manage_{$taxonomy}_custom_column", $plugin_admin_taxonomy, 'custom_column_content', 10, 3 );
 
@@ -293,6 +296,12 @@ class Leira_Access{
 
 			//add quick edit fields to taxonomy list table
 			$this->loader->add_action( 'quick_edit_custom_box', $plugin_admin_taxonomy, 'quick_edit_custom_box', 10, 2 );
+
+			//enqueue scripts for quick edit list table
+			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin_taxonomy, 'admin_enqueue_quick_edit_scripts' );
+
+			//handle sort columns
+			//$this->loader->add_filter( 'pre_get_terms', $plugin_admin_taxonomy, 'custom_column_sort', 10, 3 );
 
 			//add to loader
 			$this->loader->set( 'admin_taxonomy', $plugin_admin_taxonomy );

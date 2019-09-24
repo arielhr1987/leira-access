@@ -143,6 +143,8 @@ class Leira_Access_Admin_Post_Type{
 		$id    = isset( $item->ID ) ? $item->ID : false;
 		$roles = get_post_meta( $id, '_leira-access', true );
 		leira_access()->admin->form( $roles, $id, array(
+			'roles'      => $roles,
+			'id'         => $id,
 			'show_label' => false
 		) );
 	}
@@ -167,7 +169,10 @@ class Leira_Access_Admin_Post_Type{
 		?>
         <div class="">
             <div class="inline-edit-col">
-				<?php leira_access()->admin->form( $roles, $id ); ?>
+				<?php leira_access()->admin->form( array(
+					'roles' => $roles,
+					'id'    => $id
+				) ); ?>
             </div>
         </div>
 		<?php
@@ -193,7 +198,10 @@ class Leira_Access_Admin_Post_Type{
 		?>
         <fieldset class="inline-edit-col-left">
             <div class="inline-edit-col">
-				<?php leira_access()->admin->form( $roles, $id ); ?>
+				<?php leira_access()->admin->form( array(
+					'roles' => $roles,
+					'id'    => $id
+				) ); ?>
             </div>
         </fieldset>
 		<?php

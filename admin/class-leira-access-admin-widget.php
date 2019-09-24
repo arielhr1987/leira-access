@@ -35,7 +35,9 @@ class Leira_Access_Admin_Widget{
 		$id    = isset( $widget->id ) ? $widget->id : false;
 		$roles = isset( $instance['_leira-access'] ) ? $instance['_leira-access'] : false;
 
-		leira_access()->admin->form( $roles, $id, array(
+		leira_access()->admin->form( array(
+			'roles' => $roles,
+			'id'    => $id,
 			'label' => __( 'Access', 'leira-access' ) . ':'
 		) );
 

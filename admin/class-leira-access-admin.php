@@ -123,21 +123,29 @@ class Leira_Access_Admin{
 	/**
 	 * Render the form to select content visibility
 	 *
-	 * @param array  $roles
-	 * @param string $id
-	 * @param array  $options Possible options are:
+	 * @param array $options  Possible options are:
+	 *                        'roles'      => array(), //The selected roles
+	 *                        'id' => '', //Id o
 	 *                        'show_label' => true,// show the label
 	 *                        'label'      => __( 'Access', 'leira-access' ), //the label to show
-	 *                        'add_nonce'  => true //add nonce or not
+	 *                        'add_nonce'  => true, //add nonce or not
+	 *                        'input_id_prefix'=> 'leira-access',//prefix to use in inputs id
+	 *
 	 * @access public
 	 * @since  1.0.0
 	 */
-	public function form( $roles, $id = '', $options = array() ) {
+	public function form( $options = array() ) {
 		$options = array_merge( array(
-			'show_label' => true,
-			'label'      => __( 'Access', 'leira-access' ),
-			'add_nonce'  => true
+			'roles'           => array(),
+			'id'              => '',
+			'show_label'      => true,
+			'label'           => __( 'Access', 'leira-access' ),
+			'add_nonce'       => true,
+			'input_id_prefix' => 'leira-access'
 		), $options );
+
+		$id    = $options['id'];
+		$roles = $options['roles'];
 
 		$wp_roles = wp_roles();
 		/**
@@ -164,7 +172,7 @@ class Leira_Access_Admin{
 		// By default nothing is checked (will match "everyone" radio).
 		$status = '';
 		// Specific roles are saved as an array, so "in" or an array equals "in" is checked.
-		if ( is_array( $roles ) or $roles == 'in' ) {
+		if ( ( is_array( $roles ) && ! empty( $roles ) ) or $roles == 'in' ) {
 			$status = 'in';
 		} else if ( $roles == 'out' ) {
 			$status = 'out';
@@ -175,8 +183,12 @@ class Leira_Access_Admin{
 		$html_name_id = empty( $id ) ? "" : "[$id]";
 		$html_for_id  = empty( $id ) ? "" : "-$id";
 
-		?>
+		$input_id_prefix   = $options['input_id_prefix'];
+		$html_input_id     = sprintf( '%s-for%s', $input_id_prefix, $html_for_id );
+		$html_out_input_id = sprintf( '%s-out-for%s', $input_id_prefix, $html_for_id );
+		$html_in_input_id  = sprintf( '%s-in-for%s', $input_id_prefix, $html_for_id );
 
+		?>
 
         <div class="leira-access-container">
 			<?php if ( $options['show_label'] ): ?>
@@ -194,27 +206,27 @@ class Leira_Access_Admin{
 
                 <input type="radio" class="leira-access-status"
                        name="leira-access-status<?php echo $html_name_id; ?>"
-                       id="leira-access-for<?php echo $html_for_id; ?>" <?php checked( '', $status ); ?>
+                       id="<?php echo $html_input_id ?>" <?php checked( '', $status ); ?>
                        value=""/>
-                <label for="leira-access-for<?php echo $html_for_id; ?>">
+                <label for="<?php echo $html_input_id ?>">
 					<?php _e( 'Everyone', 'leira-access' ); ?>
                 </label>
                 <br>
 
                 <input type="radio" class="leira-access-status"
                        name="leira-access-status<?php echo $html_name_id; ?>"
-                       id="leira-access-out-for<?php echo $html_for_id; ?>" <?php checked( 'out', $status ); ?>
+                       id="<?php echo $html_out_input_id ?>" <?php checked( 'out', $status ); ?>
                        value="out"/>
-                <label for="leira-access-out-for<?php echo $html_for_id; ?>">
+                <label for="<?php echo $html_out_input_id ?>">
 					<?php _e( 'Logged Out Users', 'leira-access' ); ?>
                 </label>
                 <br>
 
                 <input type="radio" class="leira-access-status"
                        name="leira-access-status<?php echo $html_name_id; ?>"
-                       id="leira-access-in-for<?php echo $html_for_id; ?>" <?php checked( 'in', $status ); ?>
+                       id="<?php echo $html_in_input_id; ?>" <?php checked( 'in', $status ); ?>
                        value="in"/>
-                <label for="leira-access-in-for<?php echo $html_for_id; ?>">
+                <label for="<?php echo $html_in_input_id; ?>">
 					<?php _e( 'Logged In Users', 'leira-access' ); ?>
                 </label>
 
@@ -228,15 +240,19 @@ class Leira_Access_Admin{
 					/* Loop through each of the available roles. */
 					foreach ( $display_roles as $role => $name ) {
 						/* If the role has been selected, make sure it's checked. */
-						$checked = checked( true, ( is_array( $checked_roles ) && in_array( $role, $checked_roles ) ), false );
+						$checked       = checked( true, ( is_array( $checked_roles ) && in_array( $role, $checked_roles ) ), false );
+						$checkbox_id   = sprintf( '%s-%s-for%s', $input_id_prefix, $role, $html_for_id );
+						$checkbox_name = sprintf( 'leira-access-role%s[%s]', $html_name_id, $i );
 						?>
                         <input type="checkbox"
-                               name="leira-access-role<?php echo $html_name_id; ?>[<?php echo $i; ?>]"
-                               id="leira-access-<?php echo $role; ?>-for<?php echo $html_for_id; ?>" <?php echo $checked; ?>
+                               name="<?php echo $checkbox_name ?>"
+                               id="<?php echo $checkbox_id; ?>" <?php echo $checked; ?>
                                value="<?php echo $role; ?>"/>
-                        <label for="leira-access-<?php echo $role; ?>-for<?php echo $html_for_id; ?>">
-							<?php echo esc_html( $name ); ?>
-							<?php $i ++; ?>
+                        <label for="<?php echo $checkbox_id; ?>">
+							<?php
+							echo esc_html( $name );
+							$i ++;
+							?>
                         </label>
                         <br>
 
@@ -253,7 +269,7 @@ class Leira_Access_Admin{
 	 * Save the access options to metadata or options if is a widget
 	 *
 	 * @param string $id          The id
-	 * @param string $type        The object type you are saving
+	 * @param string $type        The object type you are saving [term, post, widget]
 	 * @param bool   $use_post_id Use or not the id post
 	 *
 	 * @return bool

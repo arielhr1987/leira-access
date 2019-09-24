@@ -10,6 +10,7 @@
  * @author     Ariel <arielhr1987@gmail.com>
  */
 class Leira_Access_Admin_Menu{
+
 	/**
 	 * Constructor.
 	 */
@@ -48,7 +49,10 @@ class Leira_Access_Admin_Menu{
 		//new approach
 		$roles = get_post_meta( $item->ID, '_leira-access', true );
 		$id    = isset( $item->ID ) ? $item->ID : false;
-		leira_access()->admin->form( $roles, $id );
+		leira_access()->admin->form( array(
+			'roles' => $roles,
+			'id'    => $id
+		) );
 
 		return;
 	}
