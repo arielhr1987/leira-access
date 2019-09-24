@@ -51,4 +51,27 @@
         }
     };
 
+    /**
+     * Adds an event handler to the form submit on the term overview page.
+     *
+     * Cancels default event handling and event bubbling.
+     */
+    $(function () {
+        $('#submit').click(function () {
+            var form = $(this).parents('form');
+
+            if (!validateForm(form))
+                return false;
+
+            /**
+             * Empty values
+             */
+            $('input:radio', form).prop('checked', false);
+            $('input:radio[value=""]', form).prop("checked", true);
+            $('input:checkbox', form).prop('checked', false);
+
+            return false;
+        });
+    })
+
 })(jQuery);

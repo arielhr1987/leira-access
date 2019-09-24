@@ -109,7 +109,72 @@ class Leira_Access_Admin_Taxonomy{
 	}
 
 	/**
-	 * Handle sort custom column actions
+	 * THIS METHOD IS NOT USED
+	 * Adds "wp_termmeta.meta_value" to the select query statement so the order by can work correctly.
+	 *
+	 * @param array $selects
+	 * @param array $args
+	 * @param array $taxonomies
+	 *
+	 * @return array
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function custom_column_sort_fields( $selects, $args, $taxonomies ) {
+		global $pagenow;
+		$taxonomy_to_query    = isset( $taxonomies[0] ) ? $taxonomies[0] : false;
+		$taxonomy             = isset( $_GET ['taxonomy'] ) ? sanitize_text_field( $_GET ['taxonomy'] ) : false;
+		$orderby_to_query     = isset( $args['orderby'] ) ? $args['orderby'] : false;
+		$order_by             = isset( $_GET ['orderby'] ) ? sanitize_text_field( $_GET ['orderby'] ) : false;
+		$available_taxonomies = $this->get_taxonomies();
+
+		if ( $pagenow == 'edit-tags.php'
+		     //&& $order_by == 'leira-access'
+		     && $orderby_to_query === '_leira_access'
+		     && $taxonomy_to_query === $taxonomy
+		     && in_array( $taxonomy, $available_taxonomies ) ) {
+
+			//$selects[] = 'wp_termmeta.meta_value';
+			$selects[] = "IF(wp_termmeta.meta_key <> '_leira-access', NULL, wp_termmeta.meta_value) AS _leira_access";
+		}
+
+		return $selects;
+	}
+
+
+	/**
+	 * Modifies the order by clause in the query so it match the select statement
+	 *
+	 * @param $clauses
+	 * @param $taxonomies
+	 * @param $args
+	 *
+	 * @return mixed
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function custom_column_sort_clauses( $clauses, $taxonomies, $args ) {
+		global $pagenow;
+		$taxonomy_to_query    = isset( $taxonomies[0] ) ? $taxonomies[0] : false;
+		$taxonomy             = isset( $_GET ['taxonomy'] ) ? sanitize_text_field( $_GET ['taxonomy'] ) : false;
+		$orderby_to_query     = isset( $args['orderby'] ) ? $args['orderby'] : false;
+		$order_by             = isset( $_GET ['orderby'] ) ? sanitize_text_field( $_GET ['orderby'] ) : false;
+		$available_taxonomies = $this->get_taxonomies();
+
+		if ( $pagenow == 'edit-tags.php'
+		     //&& $order_by == 'leira-access'
+		     && $orderby_to_query === '_leira_access'
+		     && $taxonomy_to_query === $taxonomy
+		     && in_array( $taxonomy, $available_taxonomies ) ) {
+
+			$clauses['orderby'] = 'ORDER BY _leira_access';
+		}
+
+		return $clauses;
+	}
+
+	/**
+	 * Handle sort custom column actions.
 	 *
 	 * @param WP_Term_Query $query
 	 *
@@ -117,35 +182,45 @@ class Leira_Access_Admin_Taxonomy{
 	 * @access public
 	 */
 	public function custom_column_sort( $query ) {
-		global $pagenow, $wpdb;
-		$taxonomy = isset( $_GET ['taxonomy'] ) ? $_GET ['taxonomy'] : false;
-		$order_by = isset( $_GET ['orderby'] ) ? $_GET ['orderby'] : false;
-		$order    = isset( $_GET ['order'] ) ? $_GET ['order'] : 'DESC';
+		global $pagenow;
+		$screen            = get_current_screen();
+		$taxonomy_to_query = isset( $query->query_vars['taxonomy'][0] ) ? $query->query_vars['taxonomy'][0] : false;
+		$orderby_to_query  = isset( $query->query_vars['orderby'] ) ? $query->query_vars['orderby'] : false;
+		$taxonomy          = isset( $_GET ['taxonomy'] ) ? sanitize_text_field( $_GET ['taxonomy'] ) : false;
+		$order_by          = isset( $_GET ['orderby'] ) ? sanitize_text_field( $_GET ['orderby'] ) : false;
+		$order             = isset( $_GET ['order'] ) ? strtoupper( sanitize_text_field( $_GET ['order'] ) ) : 'DESC';
 		if ( ! in_array( $order, array( 'ASC', 'DESC' ) ) ) {
 			$order = 'DESC';
 		}
 
+		/**
+		 * We have a problem with this query, if a term doesn't have set the _leira-access meta key and has an other
+		 * meta key set the order statement fails
+		 */
 		$available_taxonomies = $this->get_taxonomies();
-		if ( 'leira-access' == $order_by && $pagenow == 'edit-tags.php' && in_array( $taxonomy, $available_taxonomies ) ) {
+		if ( $pagenow == 'edit-tags.php'
+		     //&& $order_by === 'leira-access'
+		     && $orderby_to_query === 'leira-access'
+		     && $taxonomy_to_query === $taxonomy
+		     && in_array( $taxonomy, $available_taxonomies ) ) {
 
+			//Keep on mind that this code is execute in the edit tag page if we are sorting the "Access" column.
 			$meta_query = new WP_Meta_Query( array(
-				'order_clause' => array(
 					'relation' => 'OR',
 					array(
-						'key'  => '_leira-access',
-						'type' => 'CHAR'
+						'key' => '_leira-access',
 					),
 					array(
 						'key'     => '_leira-access',
 						'compare' => 'NOT EXISTS'
-					),
+					)
 				)
-			) );
-			// and ordering matches
-			$query->meta_query            = $meta_query;
-			$query->query_vars['orderby'] = 'meta_value_num';
+			);
+			//and ordering matches
+			$query->meta_query = $meta_query;
+			//$query->query_vars['orderby'] = 'meta_value';
+			$query->query_vars['orderby'] = '_leira_access';
 			$query->query_vars['order']   = $order;
-
 
 		}
 	}

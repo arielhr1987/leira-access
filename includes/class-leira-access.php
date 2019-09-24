@@ -301,6 +301,8 @@ class Leira_Access{
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin_taxonomy, 'admin_enqueue_quick_edit_scripts' );
 
 			//handle sort columns
+			//$this->loader->add_filter( 'get_terms_fields', $plugin_admin_taxonomy, 'custom_column_sort_fields', 10, 3 );
+			//$this->loader->add_filter( 'terms_clauses', $plugin_admin_taxonomy, 'custom_column_sort_clauses', 10, 3 );
 			//$this->loader->add_filter( 'pre_get_terms', $plugin_admin_taxonomy, 'custom_column_sort', 10, 3 );
 
 			//add to loader
