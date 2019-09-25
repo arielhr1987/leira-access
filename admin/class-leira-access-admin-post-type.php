@@ -81,21 +81,7 @@ class Leira_Access_Admin_Post_Type{
 		}
 
 		$access = get_post_meta( $post_id, '_leira-access', true );
-		$output = __( 'Everyone', 'leira-access' );
-
-		if ( $access == 'out' ) {
-			$output = __( 'Logged Out Users', 'leira-access' );
-		} else {
-			//is "in" or array of roles
-			if ( $access == 'in' ) {
-				$output = __( 'Logged In Users', 'leira-access' );
-			} else if ( is_array( $access ) ) {
-				$output = __( 'Logged In Users with Roles', 'leira-access' );
-			}
-		}
-
-		//Add inline edit values
-		$output .= sprintf( '<div class="hidden inline-leira-access">%s</div>', json_encode( $access ) );
+		$output = leira_access()->admin->column_content( $access );
 
 		echo $output;
 	}

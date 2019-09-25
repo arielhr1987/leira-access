@@ -81,29 +81,7 @@ class Leira_Access_Admin_Taxonomy{
 		}
 
 		$access = get_term_meta( $term_id, '_leira-access', true );
-		$output = __( 'Everyone', 'leira-access' );
-
-		if ( $access == 'out' ) {
-			$output = __( 'Logged Out Users', 'leira-access' );
-		} else {
-			//is "in" or array of roles
-			if ( $access == 'in' ) {
-				$output = __( 'Logged In Users', 'leira-access' );
-			} else if ( is_array( $access ) ) {
-				$roles = '';
-				if ( ! empty( $access ) ) {
-					$roles .= '<ul>';
-					foreach ( $access as $role ) {
-						$roles .= sprintf( '<li>%s</li>', $role );
-					}
-					$roles .= '</ul>';
-				}
-				$output = sprintf( __( 'Logged In Users %s', 'leira-access' ), $roles );
-			}
-		}
-
-		//Add inline edit values
-		$output .= sprintf( '<div class="hidden inline-leira-access">%s</div>', json_encode( $access ) );
+		$output = leira_access()->admin->column_content( $access );
 
 		echo $output;
 	}
@@ -279,7 +257,7 @@ class Leira_Access_Admin_Taxonomy{
 		wp_enqueue_script( 'leira-access-admin-quick-edit-taxonomy-js', plugins_url( '/js/leira-access-admin-quick-edit-taxonomy.js', __FILE__ ), array(
 			'jquery',
 			'inline-edit-tax',
-            'tags'
+			'tags'
 		) );
 	}
 
