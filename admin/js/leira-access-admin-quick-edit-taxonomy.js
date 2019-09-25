@@ -60,24 +60,22 @@
         };
 
         /**
-         * Adds an event handler to the form submit on the term overview page.
-         *
-         * Cancels default event handling and event bubbling.
+         * Clear input data after ajax completed successfully
          */
-        $('#submit').click(function () {
-            var form = $(this).parents('form');
+        $(document).ajaxComplete(function (event, request, options) {
+            if (request && 4 === request.readyState && 200 === request.status
+                && options.data && 0 <= options.data.indexOf('action=add-tag')) {
 
-            if (!validateForm(form))
-                return false;
-
-            /**
-             * Empty values
-             */
-            $('input:radio', form).prop('checked', false);
-            $('input:radio[value=""]', form).prop("checked", true);
-            $('input:checkbox', form).prop('checked', false);
-
-            return false;
+                var res = wpAjax.parseAjaxResponse(request.responseXML, 'ajax-response');
+                if (!res || res.errors) {
+                    return;
+                }
+                var form = $('#addtag');
+                $('input:radio', form).prop('checked', false);
+                $('input:radio[value=""]', form).prop("checked", true);
+                $('input:checkbox', form).prop('checked', false);
+                return;
+            }
         });
     })
 

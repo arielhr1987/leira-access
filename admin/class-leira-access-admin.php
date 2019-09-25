@@ -353,6 +353,7 @@ class Leira_Access_Admin{
 	 * @access public
 	 */
 	public function column_content( $access = '' ) {
+		global $wp_roles;
 		$output = __( 'Everyone', 'leira-access' );
 
 		if ( $access == 'out' ) {
@@ -366,7 +367,8 @@ class Leira_Access_Admin{
 				if ( ! empty( $access ) ) {
 					$roles .= '<ul>';
 					foreach ( $access as $role ) {
-						$roles .= sprintf( '<li>%s</li>', $role );
+						$display_role = translate_user_role( $wp_roles->roles[ $role ]['name'] );
+						$roles        .= sprintf( '<li>%s</li>', $display_role );
 					}
 					$roles .= '</ul>';
 				}
