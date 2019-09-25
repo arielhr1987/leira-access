@@ -278,7 +278,8 @@ class Leira_Access_Admin_Taxonomy{
 
 		wp_enqueue_script( 'leira-access-admin-quick-edit-taxonomy-js', plugins_url( '/js/leira-access-admin-quick-edit-taxonomy.js', __FILE__ ), array(
 			'jquery',
-			'inline-edit-tax'
+			'inline-edit-tax',
+            'tags'
 		) );
 	}
 

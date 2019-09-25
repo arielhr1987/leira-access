@@ -257,11 +257,17 @@ class Leira_Access{
 			}
 
 			//add bulk quick edit fields
-			//TODO: Future release
+			//TODO: For future release
 			//$this->loader->add_action( 'bulk_edit_custom_box', $plugin_admin_post_type, 'bulk_edit_custom_box', 10, 2 );
 
 			//add quick edit fields
 			$this->loader->add_action( 'quick_edit_custom_box', $plugin_admin_post_type, 'quick_edit_custom_box', 10, 2 );
+
+			//save post
+			$this->loader->add_action( 'save_post', $plugin_admin_post_type, 'save', 10, 2 );
+
+			//enqueue scripts for quick edit list table
+			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin_post_type, 'admin_enqueue_quick_edit_scripts' );
 
 			//add to loader
 			$this->loader->set( 'admin_post_type', $plugin_admin_post_type );

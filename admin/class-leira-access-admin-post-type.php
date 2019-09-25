@@ -26,7 +26,6 @@ class Leira_Access_Admin_Post_Type{
 	 */
 	public function init() {
 		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
-		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 	}
 
 	/**
@@ -95,6 +94,9 @@ class Leira_Access_Admin_Post_Type{
 			}
 		}
 
+		//Add inline edit values
+		$output .= sprintf( '<div class="hidden inline-leira-access">%s</div>', json_encode( $access ) );
+
 		echo $output;
 	}
 
@@ -142,10 +144,35 @@ class Leira_Access_Admin_Post_Type{
 
 		$id    = isset( $item->ID ) ? $item->ID : false;
 		$roles = get_post_meta( $id, '_leira-access', true );
-		leira_access()->admin->form( $roles, $id, array(
+		leira_access()->admin->form( array(
 			'roles'      => $roles,
-			'id'         => $id,
 			'show_label' => false
+		) );
+	}
+
+	/**
+	 * Enqueue quick edit list table script
+	 *
+	 * @param $hook
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 */
+	public function admin_enqueue_quick_edit_scripts( $hook ) {
+		$pages = array( 'edit.php' );
+		if ( ! in_array( $hook, $pages ) ) {
+			return;
+		}
+
+		$screen    = get_current_screen();
+		$post_type = isset( $screen->post_type ) ? $screen->post_type : false;
+		if ( ! in_array( $post_type, $this->get_post_types() ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'leira-access-admin-quick-edit-post-js', plugins_url( '/js/leira-access-admin-quick-edit-post.js', __FILE__ ), array(
+			'jquery',
+			//'inline-edit-post'
 		) );
 	}
 
@@ -164,7 +191,7 @@ class Leira_Access_Admin_Post_Type{
 			return;
 		}
 
-		$id    = '__';
+		$id    = '';
 		$roles = array();
 		?>
         <div class="">
@@ -193,7 +220,7 @@ class Leira_Access_Admin_Post_Type{
 			return;
 		}
 
-		$id    = '__';
+		$id    = '';
 		$roles = array();
 		?>
         <fieldset class="inline-edit-col-left">
@@ -208,16 +235,6 @@ class Leira_Access_Admin_Post_Type{
 	}
 
 	/**
-	 * Save the roles as menu item meta
-	 *
-	 * @return string
-	 * @since  1.0.0
-	 */
-	public function save( $menu_id, $menu_item_db_id ) {
-
-	}
-
-	/**
 	 * Save the post meta
 	 *
 	 * @param integer $post_id The post we are saving
@@ -226,7 +243,11 @@ class Leira_Access_Admin_Post_Type{
 	 * @access public
 	 * @since  1.0.0
 	 */
-	function save_quick_edit_data( $post_id ) {
+	function save( $post_id ) {
+		if ( ! is_admin() ) {
+			return $post_id;
+		}
+
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
 		}
@@ -239,8 +260,7 @@ class Leira_Access_Admin_Post_Type{
 			return $post_id;
 		}
 
-		//$data = empty( $_POST['headline_news'] ) ? 0 : 1;
-		//update_post_meta( $post_id, 'headline_news', $data );
+		leira_access()->admin->save( $post_id, 'post', false );
 	}
 
 }

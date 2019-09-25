@@ -1,18 +1,18 @@
 (function ($) {
 
     $(function () {
-
         /**
          * Create a copy of the WP inline edit post function
-         * @type {inlineEditTax.edit}
+         * @type {inlineEditPost.edit}
          */
-        var original_inline_edit = inlineEditTax.edit;
+        var original_inline_edit = inlineEditPost.edit;
 
         /**
          * Overwrite the function with our own code
          * @param id
+         * @return {boolean}
          */
-        inlineEditTax.edit = function (id) {
+        inlineEditPost.edit = function (id) {
 
             // "call" the original WP edit function
             // we don't want to leave WordPress hanging
@@ -21,18 +21,18 @@
             // now we take care of our business
 
             // get the post ID
-            var tax_id = 0;
+            var post_id = 0;
             if (typeof (id) == 'object') {
-                tax_id = parseInt(this.getId(id));
+                post_id = parseInt(this.getId(id));
             }
 
-            if (tax_id > 0) {
+            if (post_id > 0) {
                 // define the edit row
-                var edit_row = $('#edit-' + tax_id);
-                var tax_row = $('#tag-' + tax_id);
+                var edit_row = $('#edit-' + post_id);
+                var post_row = $('#post-' + post_id);
 
                 // get the data
-                var tax_access = $('.inline-leira-access', tax_row).text();
+                var tax_access = $('.inline-leira-access', post_row).text();
                 tax_access = JSON.parse(tax_access);
 
                 //uncheck all leira-access inputs
@@ -57,28 +57,10 @@
                     }
                 }
             }
-        };
-
-        /**
-         * Adds an event handler to the form submit on the term overview page.
-         *
-         * Cancels default event handling and event bubbling.
-         */
-        $('#submit').click(function () {
-            var form = $(this).parents('form');
-
-            if (!validateForm(form))
-                return false;
-
-            /**
-             * Empty values
-             */
-            $('input:radio', form).prop('checked', false);
-            $('input:radio[value=""]', form).prop("checked", true);
-            $('input:checkbox', form).prop('checked', false);
 
             return false;
-        });
-    })
+        };
+
+    });
 
 })(jQuery);
