@@ -68,7 +68,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-leira-access.php';
  * Helper method to get the main instance of the plugin
  *
  * @return Leira_Access
- * @since 1.0.0
+ * @since    1.0.0
+ * @access   global
  */
 function leira_access() {
 	return Leira_Access::instance();

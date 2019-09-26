@@ -27,6 +27,8 @@ class Leira_Access_Public_Menu{
 	 * @param $menu_item
 	 *
 	 * @return mixed
+	 * @since    1.0.0
+	 * @access   public
 	 */
 	public function setup_nav_menu_item( $menu_item ) {
 		if ( isset( $menu_item->ID ) ) {
@@ -45,6 +47,8 @@ class Leira_Access_Public_Menu{
 	 * @param $items
 	 *
 	 * @return mixed
+	 * @since    1.0.0
+	 * @access   public
 	 */
 	public function exclude_menu_items( $items ) {
 		//just a simple check
@@ -78,6 +82,8 @@ class Leira_Access_Public_Menu{
 	 * @param bool    $visible
 	 *
 	 * @return bool
+	 * @since    1.0.0
+	 * @access   public
 	 */
 	public function filter_menu_item_visible( $item, $visible ) {
 		$main = leira_access();

@@ -20,14 +20,15 @@
  * @subpackage Leira_Access/includes
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Access_Deactivator {
+class Leira_Access_Deactivator{
 
 	/**
 	 * Short Description. (use period)
 	 *
 	 * Long Description.
 	 *
-	 * @since    1.0.0
+	 * @since     1.0.0
+	 * @access    public
 	 */
 	public static function deactivate() {
 

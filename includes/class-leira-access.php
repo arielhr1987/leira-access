@@ -62,6 +62,8 @@ class Leira_Access{
 	/**
 	 * Singleton instance
 	 *
+	 * @since  1.0.0
+	 * @access protected
 	 * @var null
 	 */
 	protected static $instance = null;
@@ -70,6 +72,8 @@ class Leira_Access{
 	 * The Singleton method
 	 *
 	 * @return self
+	 * @since  1.0.0
+	 * @access public
 	 */
 	public static function instance() {
 		if ( self::$instance === null ) {
@@ -87,6 +91,7 @@ class Leira_Access{
 	 * the public-facing side of the site.
 	 *
 	 * @since    1.0.0
+	 * @access   protected
 	 */
 	protected function __construct() {
 		if ( defined( 'LEIRA_ACCESS_VERSION' ) ) {
@@ -112,9 +117,9 @@ class Leira_Access{
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   protected
 	 */
-	private function load_dependencies() {
+	protected function load_dependencies() {
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
@@ -175,9 +180,9 @@ class Leira_Access{
 	 * Uses the Leira_Access_i18n class in order to set the domain and to register the hook with WordPress.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   protected
 	 */
-	private function set_locale() {
+	protected function set_locale() {
 
 		$plugin_i18n = new Leira_Access_i18n();
 
@@ -189,9 +194,9 @@ class Leira_Access{
 	 * Register all of the hooks related to the admin area functionality of the plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   protected
 	 */
-	private function define_admin_hooks() {
+	protected function define_admin_hooks() {
 
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 
@@ -321,9 +326,9 @@ class Leira_Access{
 	 * Register all of the hooks related to the public-facing functionality of the plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   protected
 	 */
-	private function define_public_hooks() {
+	protected function define_public_hooks() {
 
 		$plugin_public = new Leira_Access_Public( $this->get_plugin_name(), $this->get_version() );
 
@@ -392,6 +397,7 @@ class Leira_Access{
 	 *
 	 * @return    Leira_Access_Loader    Orchestrates the hooks of the plugin.
 	 * @since     1.0.0
+	 * @access    public
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -402,6 +408,7 @@ class Leira_Access{
 	 *
 	 * @return    string    The version number of the plugin.
 	 * @since     1.0.0
+	 * @access    public
 	 */
 	public function get_version() {
 		return $this->version;
@@ -448,7 +455,6 @@ class Leira_Access{
 	 * @return bool
 	 * @since     1.0.0
 	 * @access    public
-	 *
 	 */
 	public function is_request( $type ) {
 		switch ( $type ) {

@@ -22,8 +22,8 @@ class Leira_Access_Admin_Taxonomy{
 	 * Get the list of available taxonomies
 	 *
 	 * @return array
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function get_taxonomies() {
 		$taxonomies = get_taxonomies( array( 'public' => true, 'show_ui' => true ), 'names' );
@@ -41,8 +41,8 @@ class Leira_Access_Admin_Taxonomy{
 	 * @param array $columns List of available columns
 	 *
 	 * @return array
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function custom_column_header( $columns ) {
 		$columns['leira-access'] = __( 'Access', 'leira-access' );
@@ -56,8 +56,8 @@ class Leira_Access_Admin_Taxonomy{
 	 * @param array $columns List of available sortable columns
 	 *
 	 * @return array
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function custom_column_sortable( $columns ) {
 		$columns['leira-access'] = 'leira-access';
@@ -72,8 +72,8 @@ class Leira_Access_Admin_Taxonomy{
 	 * @param string $column_name Name of the column.
 	 * @param int    $term_id     Term ID.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function custom_column_content( $string, $column_name, $term_id ) {
 		if ( 'leira-access' != $column_name ) {
@@ -209,8 +209,8 @@ class Leira_Access_Admin_Taxonomy{
 	 * @param string $column_name
 	 * @param string $post_type
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
 		$screen   = get_current_screen();
@@ -239,8 +239,8 @@ class Leira_Access_Admin_Taxonomy{
 	 *
 	 * @param $hook
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function admin_enqueue_quick_edit_scripts( $hook ) {
 		$pages = array( 'edit-tags.php' );
@@ -265,8 +265,8 @@ class Leira_Access_Admin_Taxonomy{
 	 *
 	 * @param $tag
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function edit_form_fields( $tag ) {
 		$roles = get_term_meta( $tag->term_id, '_leira-access', true );
@@ -295,8 +295,8 @@ class Leira_Access_Admin_Taxonomy{
 	 *
 	 * @param $taxonomy
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function add_form_fields( $taxonomy ) {
 
@@ -319,8 +319,8 @@ class Leira_Access_Admin_Taxonomy{
 	 *
 	 * @param $term_id
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function edit( $term_id ) {
 		leira_access()->admin->save( $term_id, 'term', false );
@@ -332,8 +332,8 @@ class Leira_Access_Admin_Taxonomy{
 	 *
 	 * @param $term_id
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function save( $term_id ) {
 		leira_access()->admin->save( $term_id, 'term', false );

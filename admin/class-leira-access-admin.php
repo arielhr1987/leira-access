@@ -46,8 +46,8 @@ class Leira_Access_Admin{
 	 * @param string $plugin_name The name of this plugin.
 	 * @param string $version     The version of this plugin.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function __construct( $plugin_name, $version ) {
 
@@ -74,8 +74,8 @@ class Leira_Access_Admin{
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function enqueue_styles() {
 
@@ -98,8 +98,8 @@ class Leira_Access_Admin{
 	/**
 	 * Register the JavaScript for the admin area.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function enqueue_scripts() {
 
@@ -131,8 +131,8 @@ class Leira_Access_Admin{
 	 *                        'add_nonce'  => true, //add nonce or not
 	 *                        'input_id_prefix'=> 'leira-access',//prefix to use in inputs id
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function form( $options = array() ) {
 		$options = array_merge( array(
@@ -273,8 +273,8 @@ class Leira_Access_Admin{
 	 * @param bool   $use_post_id Use or not the id post
 	 *
 	 * @return bool
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function save( $id, $type = 'post', $use_post_id = true ) {
 

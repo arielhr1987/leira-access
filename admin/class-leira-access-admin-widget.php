@@ -29,6 +29,7 @@ class Leira_Access_Admin_Widget{
 	 *
 	 * @return array
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function form( $widget, $return, $instance ) {
 
@@ -53,7 +54,8 @@ class Leira_Access_Admin_Widget{
 	 * @param WP_Widget $widget       The current widget instance
 	 *
 	 * @return array
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @access public
 	 */
 	public function update( $instance, $new_instance, $old_instance, $widget ) {
 		$save = leira_access()->admin->save( $widget->id, 'widget' );

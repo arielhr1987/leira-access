@@ -53,8 +53,8 @@ class Leira_Access_Loader{
 	/**
 	 * Initialize the collections used to maintain the actions and filters.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function __construct() {
 
@@ -70,8 +70,8 @@ class Leira_Access_Loader{
 	 * @param $key
 	 *
 	 * @return mixed|null
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function get( $key ) {
 		return isset( $this->instances[ $key ] ) ? $this->instances[ $key ] : null;
@@ -83,8 +83,8 @@ class Leira_Access_Loader{
 	 * @param $key
 	 * @param $value
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function set( $key, $value ) {
 		if ( is_string( $key ) ) {
@@ -103,8 +103,8 @@ class Leira_Access_Loader{
 	 * @param int    $accepted_args Optional. The number of arguments that should be passed to the $callback. Default
 	 *                              is 1.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function add_action( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 		$this->actions = $this->add( $this->actions, $hook, $component, $callback, $priority, $accepted_args );
@@ -120,8 +120,8 @@ class Leira_Access_Loader{
 	 * @param int    $accepted_args Optional. The number of arguments that should be passed to the $callback. Default
 	 *                              is 1
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
@@ -159,8 +159,8 @@ class Leira_Access_Loader{
 	/**
 	 * Register the filters and actions with WordPress.
 	 *
-	 * @access public
 	 * @since  1.0.0
+	 * @access public
 	 */
 	public function run() {
 
