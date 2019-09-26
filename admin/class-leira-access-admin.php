@@ -121,6 +121,21 @@ class Leira_Access_Admin{
 	}
 
 	/**
+	 * Get the list of all available roles in the system. Developers can hook the filter "leira_access_available_roles"
+	 * to include/exclude roles
+	 *
+	 * @return array
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function get_available_roles() {
+		$wp_roles = wp_roles();
+
+		return apply_filters( 'leira_access_available_roles', $wp_roles->role_names );
+	}
+
+	/**
 	 * Render the form to select content visibility
 	 *
 	 * @param array $options  Possible options are:
@@ -147,22 +162,14 @@ class Leira_Access_Admin{
 		$id    = $options['id'];
 		$roles = $options['roles'];
 
-		$wp_roles = wp_roles();
 		/**
-		 * Pass the menu item to the filter function.
-		 * This change is suggested as it allows the use of information from the menu item (and
-		 * by extension the target object) to further customize what filters appear during menu
-		 * construction.
+		 * Get the available roles to
 		 */
-		$display_roles = apply_filters( 'leira_access_available_roles', $wp_roles->role_names, $id ); //TODO: Add $item or item type (post_type)
+		$display_roles = $this->get_available_roles();
 		/**
 		 * If no roles are being used, don't display the role selection radio buttons at all.
 		 * Unless something deliberately removes the WordPress roles from this list, nothing will
 		 * be functionally altered to the end user.
-		 * This change is suggested for the benefit of users constructing granular admin permissions
-		 * using extensive custom roles as it is an effective means of stopping admins with partial
-		 * permissions to the menu from accidentally removing all restrictions from a menu item to
-		 * which they do not have access.
 		 */
 		if ( ! $display_roles ) {
 			return;
@@ -283,8 +290,7 @@ class Leira_Access_Admin{
 			return false;
 		}
 
-		$wp_roles      = wp_roles();
-		$allowed_roles = apply_filters( 'leira_access_available_roles', $wp_roles->role_names );
+		$allowed_roles = $this->get_available_roles();
 		$saved_data    = false;
 
 		$status = false;
