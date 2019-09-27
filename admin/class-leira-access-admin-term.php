@@ -9,7 +9,7 @@
  * @subpackage Leira_Access/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Access_Admin_Taxonomy{
+class Leira_Access_Admin_Term{
 
 	/**
 	 * Constructor.
@@ -26,13 +26,7 @@ class Leira_Access_Admin_Taxonomy{
 	 * @access public
 	 */
 	public function get_taxonomies() {
-		$taxonomies = get_taxonomies( array( 'public' => true, 'show_ui' => true ), 'names' );
-
-		$exclude = apply_filters( 'leira_access_excluded_taxonomies', array() );
-
-		$taxonomies = array_diff( $taxonomies, $exclude );
-
-		return $taxonomies;
+		return leira_access()->get_taxonomies();
 	}
 
 	/**

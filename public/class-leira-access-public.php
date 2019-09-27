@@ -104,8 +104,21 @@ class Leira_Access_Public{
 
 	}
 
+	/**
+	 * Determine if access to the current resource is granted according to the give $access configuration
+	 *
+	 * @param $access
+	 * @param $item
+	 *
+	 * @return bool
+	 * @since  1.0.0
+	 * @access public
+	 */
 	public function check_access( $access, $item ) {
-		$visible = false;
+		if ( is_string( $access ) && empty( trim( $access ) ) ) {
+			//Its an empty string, visible to Everyone
+			return true;
+		}
 		switch ( $access ) {
 			case 'in' :
 				/**

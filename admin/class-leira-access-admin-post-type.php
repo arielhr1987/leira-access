@@ -36,19 +36,7 @@ class Leira_Access_Admin_Post_Type{
 	 * @access public
 	 */
 	public function get_post_types() {
-		$post_types = get_post_types( array( 'public' => true, 'show_ui' => true ), 'names' );
-
-		$exclude = apply_filters( 'leira_access_excluded_post_types', array(
-			'forum',
-			'topic',
-			'reply',
-			//'product',
-			'attachment'
-		) );
-
-		$post_types = array_diff( $post_types, $exclude );
-
-		return $post_types;
+		return leira_access()->get_post_types();
 	}
 
 	/**
