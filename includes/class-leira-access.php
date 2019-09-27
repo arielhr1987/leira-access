@@ -27,7 +27,8 @@
  * @subpackage Leira_Access/includes
  * @author     Ariel <arielhr1987@gmail.com>
  *
- * @property Leira_Access_Admin admin
+ * @property Leira_Access_Admin  admin
+ * @property Leira_Access_Public public
  */
 class Leira_Access{
 
@@ -169,6 +170,11 @@ class Leira_Access{
 		 * Nav Menu
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-access-public-menu.php';
+
+		/**
+		 * Widgets
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-access-public-widget.php';
 
 		$this->loader = new Leira_Access_Loader();
 
@@ -345,11 +351,21 @@ class Leira_Access{
 		//Add metadata to menu items
 		$this->loader->add_filter( 'wp_setup_nav_menu_item', $plugin_public_menu, 'setup_nav_menu_item' );
 		//Add custom filter to check visibility of menu items
-		$this->loader->add_filter( 'wp_get_nav_menu_items', $plugin_public_menu, 'exclude_menu_items', 20 );
+		$this->loader->add_filter( 'wp_get_nav_menu_items', $plugin_public_menu, 'check_access', 20 );
 		//filter menu item visibility
-		$this->loader->add_filter( 'nav_menu_item_visibility', $plugin_public_menu, 'filter_menu_item_visible', 20, 2 );
+		$this->loader->add_filter( 'leira_access_menu_item_visibility', $plugin_public_menu, 'filter_menu_item_visible', 20, 2 );
 
 		$this->loader->set( 'public_menu', $plugin_public_menu );
+
+		/**
+		 * Widgets
+		 */
+		$plugin_public_widget = new Leira_Access_Public_Widget();
+
+		//$this->loader->add_filter( 'sidebars_widgets', $plugin_public_widget, 'check_access' );
+		$this->loader->add_filter( 'widget_display_callback', $plugin_public_widget, 'check_access', 10, 3 );
+
+		$this->loader->set( 'public_widget', $plugin_public_widget );
 
 	}
 

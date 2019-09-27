@@ -50,17 +50,28 @@ class Leira_Access_Public_Menu{
 	 * @since    1.0.0
 	 * @access   public
 	 */
-	public function exclude_menu_items( $items ) {
+	public function check_access( $items ) {
 		//just a simple check
 		if ( ! empty( $items ) ) {
+
 			$hidden_items = array();
+
 			foreach ( $items as $key => $item ) {
+
 				$visible = true;
+
 				//check if the item is child of a hidden item
 				if ( isset( $item->menu_item_parent ) && in_array( $item->menu_item_parent, $hidden_items ) ) {
 					$visible = false;
 				}
-				$visible = apply_filters( 'nav_menu_item_visibility', $item, $visible );
+
+				if ( $visible && isset( $item->roles ) ) {
+
+					$visible = leira_access()->public->check_access( $item->roles, $item );
+				}
+
+				$visible = apply_filters( 'leira_access_menu_item_visibility', $visible, $item );
+
 				if ( ! $visible ) {
 					//remove the menu item from the list and add it to hidden items
 					if ( isset( $item->ID ) ) {
@@ -77,15 +88,16 @@ class Leira_Access_Public_Menu{
 	/**
 	 * Filter if the menu item should be visible or not.
 	 * This is an example of how to use the this filter
+	 * This is an example usage of the filter "leira_access_menu_item_visibility"
 	 *
-	 * @param WP_Post $item
 	 * @param bool    $visible
+	 * @param WP_Post $item
 	 *
 	 * @return bool
 	 * @since    1.0.0
 	 * @access   public
 	 */
-	public function filter_menu_item_visible( $item, $visible ) {
+	public function filter_menu_item_visible( $visible, $item ) {
 		$main = leira_access();
 		if ( $main->is_request( 'frontend' ) and $visible ) {
 			if ( $item->post_title == 'Google' ) {

@@ -136,6 +136,46 @@ class Leira_Access_Admin{
 	}
 
 	/**
+	 * Returns the output to show in "Access" columns in the list tables
+	 *
+	 * @param string $access The metadata to decode and display
+	 *
+	 * @return string The html output
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function column_content( $access = '' ) {
+		global $wp_roles;
+		$output = __( 'Everyone', 'leira-access' );
+
+		if ( $access == 'out' ) {
+			$output = __( 'Logged Out Users', 'leira-access' );
+		} else {
+			//is "in" or array of roles
+			if ( $access == 'in' ) {
+				$output = __( 'Logged In Users', 'leira-access' );
+			} else if ( is_array( $access ) ) {
+				$roles = '';
+				if ( ! empty( $access ) ) {
+					$roles .= '<ul>';
+					foreach ( $access as $role ) {
+						$display_role = esc_html( translate_user_role( $wp_roles->roles[ $role ]['name'] ) );
+						$roles        .= sprintf( '<li>%s</li>', $display_role );
+					}
+					$roles .= '</ul>';
+				}
+				$output = sprintf( __( 'Logged In Users %s', 'leira-access' ), $roles );
+			}
+		}
+
+		//Add inline edit values
+		$output .= sprintf( '<div class="hidden inline-leira-access">%s</div>', json_encode( $access ) );
+
+		return $output;
+	}
+
+	/**
 	 * Render the form to select content visibility
 	 *
 	 * @param array $options  Possible options are:
@@ -257,7 +297,7 @@ class Leira_Access_Admin{
                                value="<?php echo $role; ?>"/>
                         <label for="<?php echo $checkbox_id; ?>">
 							<?php
-							echo esc_html( $name );
+							echo esc_html( translate_user_role( $name ) );
 							$i ++;
 							?>
                         </label>
@@ -346,46 +386,6 @@ class Leira_Access_Admin{
 		}
 
 		return true;
-	}
-
-	/**
-	 * Returns the output to show "Access" columns in the list tables
-	 *
-	 * @param string $access The metadata to decode and display
-	 *
-	 * @return string The html output
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 */
-	public function column_content( $access = '' ) {
-		global $wp_roles;
-		$output = __( 'Everyone', 'leira-access' );
-
-		if ( $access == 'out' ) {
-			$output = __( 'Logged Out Users', 'leira-access' );
-		} else {
-			//is "in" or array of roles
-			if ( $access == 'in' ) {
-				$output = __( 'Logged In Users', 'leira-access' );
-			} else if ( is_array( $access ) ) {
-				$roles = '';
-				if ( ! empty( $access ) ) {
-					$roles .= '<ul>';
-					foreach ( $access as $role ) {
-						$display_role = translate_user_role( $wp_roles->roles[ $role ]['name'] );
-						$roles        .= sprintf( '<li>%s</li>', $display_role );
-					}
-					$roles .= '</ul>';
-				}
-				$output = sprintf( __( 'Logged In Users %s', 'leira-access' ), $roles );
-			}
-		}
-
-		//Add inline edit values
-		$output .= sprintf( '<div class="hidden inline-leira-access">%s</div>', json_encode( $access ) );
-
-		return $output;
 	}
 
 }

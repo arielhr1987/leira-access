@@ -104,4 +104,44 @@ class Leira_Access_Public{
 
 	}
 
+	public function check_access( $access, $item ) {
+		$visible = false;
+		switch ( $access ) {
+			case 'in' :
+				/**
+				 * Multisite compatibility.
+				 *
+				 * For the logged in condition to work,
+				 * the user has to be a logged in member of the current blog
+				 * or be a logged in super user.
+				 */
+				$visible = is_user_member_of_blog() || is_super_admin() ? true : false;
+				break;
+			case 'out' :
+				/**
+				 * Multisite compatibility.
+				 *
+				 * For the logged out condition to work,
+				 * the user has to be either logged out
+				 * or not be a member of the current blog.
+				 * But they also may not be a super admin,
+				 * because logged in super admins should see the internal stuff, not the external.
+				 */
+				$visible = ! is_user_member_of_blog() && ! is_super_admin() ? true : false;
+				break;
+			default:
+				$visible = false;
+				if ( is_array( $access ) && ! empty( $access ) ) {
+					foreach ( $access as $role ) {
+						if ( current_user_can( $role ) ) {
+							$visible = true;
+						}
+					}
+				}
+				break;
+		}
+
+		return $visible;
+	}
+
 }
