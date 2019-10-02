@@ -62,24 +62,17 @@ class Leira_Access_Public_Post_Type{
 						}
 					}
 				}
+
+				$ancestors = get_post_ancestors( $post->ID );
+				//check if the post is descendant of a restricted post
 			}
 
 			$visible = apply_filters( 'leira_access_post_type_visibility', $visible, $post );
 
 			if ( ! $visible ) {
 
-				$redirect_to = get_option( 'leira_redirect_to' );
-				$redirect_to = isset( $redirect_to['leira_redirect_to'] ) ? $redirect_to['leira_redirect_to'] : false;
+				leira_access()->public->redirect( $post->ID );
 
-				if ( ! empty( $redirect_to ) ) {
-
-					wp_redirect( $redirect_to );
-
-				} else {
-
-					wp_redirect( wp_login_url( get_permalink( $post->ID ) ) );
-
-				}
 			}
 		}
 
@@ -99,8 +92,8 @@ class Leira_Access_Public_Post_Type{
 
 				if ( is_user_logged_in() ) {
 					/**
-					 * User is logged in, show post types with "_leira-access" meta value equal to "in"
-					 * or meta doesn't exist or containing any the user role
+					 * User is logged in, show post types with "_leira-access" meta value equal to "in",
+					 * meta doesn't exist or meta contains any of the current user role
 					 */
 					$user  = wp_get_current_user();
 					$roles = ( array ) $user->roles;
@@ -152,5 +145,47 @@ class Leira_Access_Public_Post_Type{
 
 			}
 		}
+	}
+
+	/**
+	 * Return the list of post ids which are restricted, for internal use only
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 */
+	protected function get_restricted_posts_ids() {
+
+		$user                 = wp_get_current_user();
+		$roles                = ( array ) $user->roles;
+		$available_post_types = leira_access()->get_post_types();
+		$available_post_types = array_keys( $available_post_types );
+
+		$query_args = array(
+			'posts_per_page' => - 1,
+			'offset'         => 0,
+			'fields'         => 'ids',
+			'post_type'      => $available_post_types,
+			'meta_query'     => array(
+				'relation' => 'OR',
+				array(
+					'key'     => '_leira-access',
+					'value'   => 'in',
+					'compare' => '=',
+				)
+			)
+		);
+
+		//in case the user has more than 1 role assigned
+		foreach ( $roles as $role ) {
+			$meta_query[] = array(
+				'key'     => '_leira-access',
+				'value'   => "$role",
+				'compare' => 'LIKE',
+			);
+		}
+
+		$ids = get_posts( $query_args );
+
+		return $ids;
 	}
 }

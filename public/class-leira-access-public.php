@@ -157,4 +157,28 @@ class Leira_Access_Public{
 		return $visible;
 	}
 
+	public function is_post_visible( $term ) {
+
+	}
+
+	public function is_term_visible( $term ) {
+
+	}
+
+	public function redirect( $id ) {
+		$redirect_to = get_option( 'leira_redirect_to', '' );
+		$redirect_to = isset( $redirect_to['leira_redirect_to'] ) ? $redirect_to['leira_redirect_to'] : false;
+
+		$redirect_to = apply_filters( 'leira_access_redirect_url', $redirect_to );
+
+		if ( ! empty( $redirect_to ) ) {
+
+			$redirect_to = wp_login_url( get_permalink( $id ) );
+			wp_redirect( $redirect_to );
+
+		}
+
+		wp_redirect( $redirect_to );
+	}
+
 }

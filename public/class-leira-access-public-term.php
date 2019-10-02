@@ -40,20 +40,12 @@ class Leira_Access_Public_Term{
 
 			$visible = apply_filters( 'leira_access_term_visibility', $visible, $term );
 
+			//check for ancestors
+
 			if ( ! $visible ) {
 
-				$redirect_to = get_option( 'leira_redirect_to' );
-				$redirect_to = isset( $redirect_to['leira_redirect_to'] ) ? $redirect_to['leira_redirect_to'] : false;
+				leira_access()->public->redirect( $term->ID );
 
-				if ( ! empty( $redirect_to ) ) {
-
-					wp_redirect( $redirect_to );
-
-				} else {
-
-					wp_redirect( wp_login_url( get_permalink( $term->ID ) ) );
-
-				}
 			}
 		}
 
