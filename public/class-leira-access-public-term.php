@@ -33,12 +33,8 @@ class Leira_Access_Public_Term{
 		$taxonomy             = ( isset( $term->taxonomy ) && ! empty( $term->taxonomy ) ) ? $term->taxonomy : false;
 
 		if ( $term instanceof WP_Term && in_array( $taxonomy, $available_taxonomies ) ) {
-			// term requested
-			$access = get_term_meta( $term->ID, '_leira-access', true );
 
-			$visible = leira_access()->public->check_access( $access, $term );
-
-			$visible = apply_filters( 'leira_access_term_visibility', $visible, $term );
+			$visible = leira_access()->public->check_access( $term );
 
 			//check for ancestors
 

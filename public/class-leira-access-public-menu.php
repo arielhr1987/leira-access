@@ -22,26 +22,6 @@ class Leira_Access_Public_Menu{
 	}
 
 	/**
-	 * Add roles to the menu item
-	 *
-	 * @param $menu_item
-	 *
-	 * @return mixed
-	 * @since    1.0.0
-	 * @access   public
-	 */
-	public function setup_nav_menu_item( $menu_item ) {
-		if ( isset( $menu_item->ID ) ) {
-			$roles = get_post_meta( $menu_item->ID, '_leira-access', true );
-			if ( ! empty( $roles ) ) {
-				$menu_item->roles = $roles;
-			}
-		}
-
-		return $menu_item;
-	}
-
-	/**
 	 * Exclude menus from the array to show
 	 *
 	 * @param $items
@@ -65,12 +45,10 @@ class Leira_Access_Public_Menu{
 					$visible = false;
 				}
 
-				if ( $visible && isset( $item->roles ) ) {
+				if ( $visible ) {
 
-					$visible = leira_access()->public->check_access( $item->roles, $item );
+					$visible = leira_access()->public->check_access( $item );
 				}
-
-				$visible = apply_filters( 'leira_access_menu_item_visibility', $visible, $item );
 
 				if ( ! $visible ) {
 					//remove the menu item from the list and add it to hidden items
@@ -101,7 +79,7 @@ class Leira_Access_Public_Menu{
 		$main = leira_access();
 		if ( $main->is_request( 'frontend' ) and $visible ) {
 			if ( $item->post_title == 'Google' ) {
-				$visible = false;
+				//$visible = false;
 			}
 		}
 

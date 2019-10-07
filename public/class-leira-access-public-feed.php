@@ -33,11 +33,9 @@ class Leira_Access_Public_Feed{
 	public function check_access( $content ) {
 		global $post;
 
-		$access = get_post_meta( $post->ID . '_leira-access' , true);
+		$visible = leira_access()->public->check_access( $post );
 
-		$visible = leira_access()->public->check_access( $access, $content );
-
-		$visible = apply_filters( 'leira_access_feed_visibility', $visible, $content );
+		$visible = apply_filters( 'leira_access_feed_visibility', $visible, $post );
 
 		if ( is_feed() && ! $visible ) {
 			return __( 'This content is restricted', 'leira-access' );

@@ -364,9 +364,13 @@ class Leira_Access{
 		$plugin_public_menu = new Leira_Access_Public_Menu();
 
 		//Add metadata to menu items
-		$this->loader->add_filter( 'wp_setup_nav_menu_item', $plugin_public_menu, 'setup_nav_menu_item' );
+		//$this->loader->add_filter( 'wp_setup_nav_menu_item', $plugin_public_menu, 'setup_nav_menu_item' );
+
 		//Add custom filter to check visibility of menu items
-		$this->loader->add_filter( 'wp_get_nav_menu_items', $plugin_public_menu, 'check_access', 20 );
+		if ( ! is_admin() ) {
+			$this->loader->add_filter( 'wp_get_nav_menu_items', $plugin_public_menu, 'check_access', 20 );
+		}
+
 		//filter menu item visibility
 		$this->loader->add_filter( 'leira_access_menu_item_visibility', $plugin_public_menu, 'filter_menu_item_visible', 20, 2 );
 
@@ -408,6 +412,16 @@ class Leira_Access{
 		$this->loader->add_action( 'wp', $plugin_public_post_type, 'check_access' );
 
 		$this->loader->add_action( 'pre_get_posts', $plugin_public_post_type, 'remove_posts_in_query' );
+
+		$this->loader->add_filter( 'widget_comments_args', $plugin_public_post_type, 'hide_posts_in_recent_comments_widget' );
+
+		$this->loader->add_filter( 'widget_posts_args', $plugin_public_post_type, 'hide_posts_in_recent_posts_widget' );
+
+		$this->loader->add_filter( 'widget_pages_args', $plugin_public_post_type, 'hide_pages_in_pages_widget' );
+
+		//$this->loader->add_filter( 'widget_categories_args', $plugin_public_post_type, 'hide_pages_in_pages_widget' );
+
+		//$this->loader->add_filter( 'widget_categories_dropdown_args', $plugin_public_post_type, 'hide_pages_in_pages_widget' );
 
 		$this->loader->set( 'public_post_type', $plugin_public_post_type );
 

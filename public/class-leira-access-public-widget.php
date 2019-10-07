@@ -22,26 +22,6 @@ class Leira_Access_Public_Widget{
 	}
 
 	/**
-	 * Add roles to the menu item
-	 *
-	 * @param $menu_item
-	 *
-	 * @return mixed
-	 * @since    1.0.0
-	 * @access   public
-	 */
-	public function setup_nav_menu_item( $menu_item ) {
-		if ( isset( $menu_item->ID ) ) {
-			$roles = get_post_meta( $menu_item->ID, '_leira-access', true );
-			if ( ! empty( $roles ) ) {
-				$menu_item->roles = $roles;
-			}
-		}
-
-		return $menu_item;
-	}
-
-	/**
 	 * Exclude widgets from the array to show
 	 *
 	 * @param array     $settings
@@ -57,87 +37,13 @@ class Leira_Access_Public_Widget{
 		$visible = true;
 		if ( isset( $settings['_leira-access'] ) && $access = $settings['_leira-access'] ) {
 
-			$visible = leira_access()->public->check_access( $access, $widget );
+			$widget->leira_access = $access;
 
-			$visible = apply_filters( 'leira_access_widget_visibility', $visible, $settings, $widget, $args );
+			$visible = leira_access()->public->check_access( $widget );
+
+			//$visible = apply_filters( 'leira_access_widget_visibility', $visible, $settings, $widget, $args );
 		}
 
 		return $visible ? $settings : false;
-	}
-
-
-	/**
-	 * prevent from displaying restricted posts in recent posts widget
-	 *
-	 * @since    1.2.0
-	 */
-	public function hide_rectricted_posts_in_recent_posts( $query_args ) {
-
-		if ( ! is_admin() && ! is_user_logged_in() ) {
-			// Not a query for an admin page.
-			// User NOT logged in
-
-			$query_args['meta_query'] = array(
-				'relation' => 'OR',
-				array(
-					'key'     => 'arc_restricted_post',
-					'value'   => 1,
-					'compare' => '!=',
-					'type'    => 'NUMERIC'
-
-				),
-				array(
-					'key'     => 'arc_restricted_post',
-					'compare' => 'NOT EXISTS',
-				)
-			);
-		}
-
-		return $query_args;
-	}
-
-	/**
-	 * prevent from displaying restricted posts in recent comments widget
-	 *
-	 * @since    1.2.0
-	 */
-	public function hide_rectricted_posts_in_recent_comments( $query_args ) {
-		$restricted_posts = $this->get_restricted_posts_ids();
-
-		if ( ! is_admin() && ! is_user_logged_in() && is_array( $restricted_posts ) && sizeof( $restricted_posts ) > 0 ) {
-			// Not a query for an admin page.
-			// User NOT logged in
-
-			$query_args['post__not_in'] = $restricted_posts;
-		}
-
-		return $query_args;
-	}
-
-
-	/**
-	 * return list of post ids which are restricted, for internal use only
-	 *
-	 * @since    1.2.0
-	 */
-	private function get_restricted_posts_ids() {
-		$query_args = array(
-			'posts_per_page' => - 1,
-			'offset'         => 0,
-			'fields'         => 'ids',
-			'meta_query'     => array(
-				array(
-					'key'     => 'arc_restricted_post',
-					'value'   => 1,
-					'compare' => '=',
-					'type'    => 'NUMERIC'
-
-				)
-			)
-		);
-
-		$postslist = get_posts( $query_args );
-
-		return $postslist;
 	}
 }

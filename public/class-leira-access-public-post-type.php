@@ -37,10 +37,9 @@ class Leira_Access_Public_Post_Type{
 		$post_type            = ( isset( $post->post_type ) && ! empty( $post->post_type ) ) ? $post->post_type : false;
 
 		if ( $post instanceof WP_Post && in_array( $post_type, $available_post_types ) ) {
-			// post requested
-			$access = get_post_meta( $post->ID, '_leira-access', true );
 
-			$visible = leira_access()->public->check_access( $access, $post );
+			// post requested
+			$visible = leira_access()->public->check_access( $post );
 
 			// check also its parent taxonomies
 			if ( $visible ) {
@@ -51,11 +50,7 @@ class Leira_Access_Public_Post_Type{
 
 					foreach ( $parent_terms as $term ) {
 
-						$term_access = get_term_meta( $term->ID, '_leira-access', true );
-
-						$visible = leira_access()->public->check_access( $term_access, $term );
-
-						$visible = apply_filters( 'leira_access_term_visibility', $visible, $term );
+						$visible = leira_access()->public->check_access( $term );
 
 						if ( ! $visible ) {
 							break;
@@ -66,8 +61,6 @@ class Leira_Access_Public_Post_Type{
 				$ancestors = get_post_ancestors( $post->ID );
 				//check if the post is descendant of a restricted post
 			}
-
-			$visible = apply_filters( 'leira_access_post_type_visibility', $visible, $post );
 
 			if ( ! $visible ) {
 
@@ -90,56 +83,7 @@ class Leira_Access_Public_Post_Type{
 
 			if ( ! is_single() ) {
 
-				if ( is_user_logged_in() ) {
-					/**
-					 * User is logged in, show post types with "_leira-access" meta value equal to "in",
-					 * meta doesn't exist or meta contains any of the current user role
-					 */
-					$user  = wp_get_current_user();
-					$roles = ( array ) $user->roles;
-
-					$meta_query = array(
-						'relation' => 'OR',
-						array(
-							'key'     => '_leira-access',
-							'value'   => 'in',
-							'compare' => '=',
-
-						),
-						array(
-							'key'     => '_leira-access',
-							'compare' => 'NOT EXISTS',
-						)
-					);
-
-					//in case the user has more than 1 role assigned
-					foreach ( $roles as $role ) {
-						$meta_query[] = array(
-							'key'     => '_leira-access',
-							'value'   => "$role",
-							'compare' => 'LIKE',
-						);
-					}
-
-				} else {
-					/**
-					 * User is not logged in, show post types with "_leira-access" meta value equal to "out"
-					 * or meta doesn't exist
-					 */
-					$meta_query = array(
-						'relation' => 'OR',
-						array(
-							'key'     => '_leira-access',
-							'value'   => 'out',
-							'compare' => '=',
-
-						),
-						array(
-							'key'     => '_leira-access',
-							'compare' => 'NOT EXISTS',
-						)
-					);
-				}
+				$meta_query = leira_access()->public->get_meta_query();
 
 				$query->set( 'meta_query', $meta_query );
 
@@ -147,45 +91,115 @@ class Leira_Access_Public_Post_Type{
 		}
 	}
 
+
 	/**
-	 * Return the list of post ids which are restricted, for internal use only
+	 * Prevent from displaying restricted posts in recent posts widget
 	 *
+	 * @param $query_args
+	 *
+	 * @return mixed
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function hide_posts_in_recent_posts_widget( $query_args ) {
+
+		if ( ! is_admin() ) {
+			// Not a query for an admin page.
+			$meta_query               = leira_access()->public->get_meta_query();
+			$query_args['meta_query'] = $meta_query;
+		}
+
+		return $query_args;
+	}
+
+
+	/**
+	 * Prevent from displaying restricted pages in pages widget
+	 *
+	 * @param $query_args
+	 *
+	 * @return mixed
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function hide_pages_in_pages_widget( $query_args ) {
+
+		if ( ! is_admin() ) {
+			// Not a query for an admin page.
+			$hidden_posts          = $this->get_visible_page_ids();
+			$query_args['include'] = implode( ',', $hidden_posts );
+
+			//TODO: dont use include, use exclude instead
+		}
+
+		return $query_args;
+	}
+
+	/**
+	 * prevent from displaying restricted posts in recent comments widget
+	 *
+	 * @param $query_args
+	 *
+	 * @return mixed
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function hide_posts_in_recent_comments_widget( $query_args ) {
+
+		if ( ! is_admin() ) {
+			$visible_posts          = $this->get_visible_page_ids();
+			$query_args['post__in'] = $visible_posts;
+		}
+
+		return $query_args;
+	}
+
+	/**
+	 * Return a list of post ids which are accessible, for internal use only
+	 *
+	 * @return array
 	 * @since    1.0.0
 	 * @access   protected
 	 */
-	protected function get_restricted_posts_ids() {
-
-		$user                 = wp_get_current_user();
-		$roles                = ( array ) $user->roles;
-		$available_post_types = leira_access()->get_post_types();
-		$available_post_types = array_keys( $available_post_types );
-
+	protected function get_visible_post_ids() {
 		$query_args = array(
 			'posts_per_page' => - 1,
 			'offset'         => 0,
 			'fields'         => 'ids',
-			'post_type'      => $available_post_types,
-			'meta_query'     => array(
-				'relation' => 'OR',
-				array(
-					'key'     => '_leira-access',
-					'value'   => 'in',
-					'compare' => '=',
-				)
-			)
+			'meta_query'     => leira_access()->public->get_meta_query()
 		);
 
-		//in case the user has more than 1 role assigned
-		foreach ( $roles as $role ) {
-			$meta_query[] = array(
-				'key'     => '_leira-access',
-				'value'   => "$role",
-				'compare' => 'LIKE',
-			);
-		}
+		$post_ids = get_posts( $query_args );
 
-		$ids = get_posts( $query_args );
+		return $post_ids;
+	}
 
-		return $ids;
+	/**
+	 * Returns a list with all page ids that are accessible
+	 *
+	 * @return array
+	 * @since    1.0.0
+	 * @access   protected
+	 */
+	protected function get_visible_page_ids() {
+
+		$query_args = array(
+			'orderby'          => 'date',
+			'order'            => 'DESC',
+			'posts_per_page'   => - 1,
+			'post_type'        => 'any',
+			'post_status'      => 'publish',
+			'offset'           => 0,
+			'fields'           => 'ids',
+			'suppress_filters' => true,
+			'meta_query'       => leira_access()->public->get_meta_query()
+		);
+		$get_posts  = new WP_Query;
+
+		return $get_posts->query( $query_args );
+	}
+
+	protected function get_visible_categoriy_ids() {
+
 	}
 }

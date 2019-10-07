@@ -107,64 +107,83 @@ class Leira_Access_Public{
 	/**
 	 * Determine if access to the current resource is granted according to the give $access configuration
 	 *
-	 * @param $access
 	 * @param $item
 	 *
 	 * @return bool
 	 * @since  1.0.0
 	 * @access public
 	 */
-	public function check_access( $access, $item ) {
-		if ( is_string( $access ) && empty( trim( $access ) ) ) {
-			//Its an empty string, visible to Everyone
-			return true;
+	public function check_access( $item ) {
+
+		$visible = true;
+		$access  = '';
+		$type    = '';
+
+		if ( $item instanceof WP_Term ) {
+			$access = get_term_meta( $item->term_id, '_leira-access', true );
+			$type   = 'term';
+		} elseif ( $item instanceof WP_Post ) {
+			$access = get_post_meta( $item->ID, '_leira-access', true );
+			$type   = 'post';
+			if ( isset( $item->post_type ) && $item->post_type == 'nav_menu_item' ) {
+				$type = 'menu_item';
+			}
+		} elseif ( $item instanceof WP_Widget ) {
+			$access = $item->leira_access;
+			$type   = 'widget';
 		}
-		switch ( $access ) {
-			case 'in' :
-				/**
-				 * Multisite compatibility.
-				 *
-				 * For the logged in condition to work,
-				 * the user has to be a logged in member of the current blog
-				 * or be a logged in super user.
-				 */
-				$visible = is_user_member_of_blog() || is_super_admin() ? true : false;
-				break;
-			case 'out' :
-				/**
-				 * Multisite compatibility.
-				 *
-				 * For the logged out condition to work,
-				 * the user has to be either logged out
-				 * or not be a member of the current blog.
-				 * But they also may not be a super admin,
-				 * because logged in super admins should see the internal stuff, not the external.
-				 */
-				$visible = ! is_user_member_of_blog() && ! is_super_admin() ? true : false;
-				break;
-			default:
-				$visible = false;
-				if ( is_array( $access ) && ! empty( $access ) ) {
-					foreach ( $access as $role ) {
-						if ( current_user_can( $role ) ) {
-							$visible = true;
+
+		if ( is_array( $access ) || in_array( $access, array( 'in', 'out' ) ) ) {
+			switch ( $access ) {
+				case 'in' :
+					/**
+					 * Multisite compatibility.
+					 *
+					 * For the logged in condition to work,
+					 * the user has to be a logged in member of the current blog
+					 * or be a logged in super user.
+					 */
+					$visible = is_user_member_of_blog() || is_super_admin() ? true : false;
+					break;
+				case 'out' :
+					/**
+					 * Multisite compatibility.
+					 *
+					 * For the logged out condition to work,
+					 * the user has to be either logged out
+					 * or not be a member of the current blog.
+					 * But they also may not be a super admin,
+					 * because logged in super admins should see the internal stuff, not the external.
+					 */
+					$visible = ! is_user_member_of_blog() && ! is_super_admin() ? true : false;
+					break;
+				default:
+					$visible = false;
+					if ( is_array( $access ) && ! empty( $access ) ) {
+						foreach ( $access as $role ) {
+							if ( current_user_can( $role ) ) {
+								$visible = true;
+							}
 						}
 					}
-				}
-				break;
+					break;
+			}
 		}
+
+		$visible = apply_filters( "leira_access_{$type}_visibility", $visible, $item );
 
 		return $visible;
 	}
 
-	public function is_post_visible( $term ) {
 
-	}
-
-	public function is_term_visible( $term ) {
-
-	}
-
+	/**
+	 * Redirect user
+	 *
+	 * @param $id
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 */
 	public function redirect( $id ) {
 		$redirect_to = get_option( 'leira_redirect_to', '' );
 		$redirect_to = isset( $redirect_to['leira_redirect_to'] ) ? $redirect_to['leira_redirect_to'] : false;
@@ -179,6 +198,71 @@ class Leira_Access_Public{
 		}
 
 		wp_redirect( $redirect_to );
+	}
+
+	/**
+	 * Returns the meta query object to exclude posts from lists
+	 *
+	 * @return array
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function get_meta_query() {
+
+		$logged_in = is_user_member_of_blog() || is_super_admin();
+
+		if ( $logged_in ) {
+			/**
+			 * User is logged in, show post types with "_leira-access" meta value equal to "in",
+			 * meta doesn't exist or meta contains any of the current user role
+			 */
+			$user  = wp_get_current_user();
+			$roles = ( array ) $user->roles;
+
+			$meta_query = array(
+				'relation' => 'OR',
+				array(
+					'key'     => '_leira-access',
+					'value'   => 'in',
+					'compare' => '=',
+
+				),
+				array(
+					'key'     => '_leira-access',
+					'compare' => 'NOT EXISTS',
+				)
+			);
+
+			//in case the user has more than 1 role assigned
+			foreach ( $roles as $role ) {
+				$meta_query[] = array(
+					'key'     => '_leira-access',
+					'value'   => "$role",
+					'compare' => 'LIKE',
+				);
+			}
+
+		} else {
+			/**
+			 * User is not logged in, show post types with "_leira-access" meta value equal to "out"
+			 * or meta doesn't exist
+			 */
+			$meta_query = array(
+				'relation' => 'OR',
+				array(
+					'key'     => '_leira-access',
+					'value'   => 'out',
+					'compare' => '=',
+
+				),
+				array(
+					'key'     => '_leira-access',
+					'compare' => 'NOT EXISTS',
+				)
+			);
+		}
+
+		return $meta_query;
 	}
 
 }
