@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Leira Access
  * Plugin URI:        leira-access
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Restrict your users access to different site sections like navs, widgets, blocks, pages, categories etc.
  * Version:           1.0.0
  * Author:            Ariel
  * Author URI:        https://github.com/arielhr1987
