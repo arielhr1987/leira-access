@@ -47,7 +47,7 @@ class Leira_Access_Admin_Menu{
 	 */
 	public function form( $item_id, $item, $depth, $args ) {
 		//new approach
-		$roles = get_post_meta( $item->ID, '_leira-access', true );
+		$roles = get_post_meta( $item->ID, Leira_Access::META_KEY, true );
 		$id    = isset( $item->ID ) ? $item->ID : false;
 		leira_access()->admin->form( array(
 			'roles' => $roles,

@@ -215,7 +215,7 @@ class Leira_Access_Admin{
 			return;
 		}
 		/* Get the roles saved for the post. */
-		//$roles = get_post_meta( $id, '_leira-access', true );
+		//$roles = get_post_meta( $id, Leira_Access::META_KEY, true );
 		// By default nothing is checked (will match "everyone" radio).
 		$status = '';
 		// Specific roles are saved as an array, so "in" or an array equals "in" is checked.
@@ -366,16 +366,16 @@ class Leira_Access_Admin{
 		switch ( $type ) {
 			case 'post':
 				if ( $saved_data ) {
-					update_post_meta( $id, '_leira-access', $saved_data );
+					update_post_meta( $id, Leira_Access::META_KEY, $saved_data );
 				} else {
-					delete_post_meta( $id, '_leira-access' );
+					delete_post_meta( $id, Leira_Access::META_KEY );
 				}
 				break;
 			case 'term':
 				if ( $saved_data ) {
-					update_term_meta( $id, '_leira-access', $saved_data );
+					update_term_meta( $id, Leira_Access::META_KEY, $saved_data );
 				} else {
-					delete_term_meta( $id, '_leira-access' );
+					delete_term_meta( $id, Leira_Access::META_KEY );
 				}
 				break;
 			case 'widget':

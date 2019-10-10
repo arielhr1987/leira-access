@@ -24,6 +24,17 @@
 input.leira-access-status:checked + label + div.leira-access-roles {
   display: block; }
 
+.leira-access-container-block.components-panel__body .components-base-control.components-radio-control {
+  margin-bottom: 0; }
+.leira-access-container-block.components-panel__body .leira-access-roles {
+  margin-left: 20px; }
+  .leira-access-container-block.components-panel__body .leira-access-roles > p {
+    margin: 0;
+    font-style: italic;
+    color: #666; }
+  .leira-access-container-block.components-panel__body .leira-access-roles > .components-base-control {
+    margin-bottom: 0; }
+
 .menu-item-settings .leira-access-container > p {
   color: #666;
   font-style: italic; }

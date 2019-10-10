@@ -33,6 +33,11 @@
 class Leira_Access{
 
 	/**
+	 * Meta key to save the access information
+	 */
+	const META_KEY = '_leira-access';
+
+	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
 	 *
@@ -159,6 +164,11 @@ class Leira_Access{
 			 * Taxonomies
 			 */
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin-term.php';
+
+			/**
+			 * Blocks
+			 */
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-leira-access-admin-block.php';
 		}
 
 		/**
@@ -190,6 +200,11 @@ class Leira_Access{
 		 * Post Type
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-access-public-post-type.php';
+
+		/**
+		 * Block
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-access-public-block.php';
 
 		$this->loader = new Leira_Access_Loader();
 
@@ -340,6 +355,16 @@ class Leira_Access{
 			//add to loader
 			$this->loader->set( 'admin_taxonomy', $plugin_admin_term );
 
+			/**
+			 * Blocks
+			 */
+			$plugin_admin_block = new Leira_Access_Admin_Block();
+
+			$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_admin_block, 'enqueue_js' );
+
+			//add to loader
+			$this->loader->set( 'admin_block', $plugin_admin_block );
+
 		}
 	}
 
@@ -384,6 +409,16 @@ class Leira_Access{
 		//$this->loader->add_filter( 'sidebars_widgets', $plugin_public_widget, 'check_access' );
 		$this->loader->add_filter( 'widget_display_callback', $plugin_public_widget, 'check_access', 10, 3 );
 
+		$this->loader->add_filter( 'widget_posts_args', $plugin_public_widget, 'hide_posts_in_recent_posts_widget' );
+
+		$this->loader->add_filter( 'widget_pages_args', $plugin_public_widget, 'hide_pages_in_pages_widget' );
+
+		$this->loader->add_filter( 'widget_comments_args', $plugin_public_widget, 'hide_posts_in_recent_comments_widget' );
+
+		$this->loader->add_filter( 'widget_categories_args', $plugin_public_widget, 'hide_categories_in_category_widget' );
+
+		//$this->loader->add_filter( 'widget_categories_dropdown_args', $plugin_public_widget, 'hide_pages_in_pages_widget' );
+
 		$this->loader->set( 'public_widget', $plugin_public_widget );
 
 		/**
@@ -413,17 +448,16 @@ class Leira_Access{
 
 		$this->loader->add_action( 'pre_get_posts', $plugin_public_post_type, 'remove_posts_in_query' );
 
-		$this->loader->add_filter( 'widget_comments_args', $plugin_public_post_type, 'hide_posts_in_recent_comments_widget' );
-
-		$this->loader->add_filter( 'widget_posts_args', $plugin_public_post_type, 'hide_posts_in_recent_posts_widget' );
-
-		$this->loader->add_filter( 'widget_pages_args', $plugin_public_post_type, 'hide_pages_in_pages_widget' );
-
-		//$this->loader->add_filter( 'widget_categories_args', $plugin_public_post_type, 'hide_pages_in_pages_widget' );
-
-		//$this->loader->add_filter( 'widget_categories_dropdown_args', $plugin_public_post_type, 'hide_pages_in_pages_widget' );
-
 		$this->loader->set( 'public_post_type', $plugin_public_post_type );
+
+		/**
+		 * Blocks
+		 */
+		$plugin_public_block = new Leira_Access_Public_Block();
+
+		$this->loader->add_action( 'render_block', $plugin_public_block, 'check_access', 10, 2 );
+
+		$this->loader->set( 'public_block', $plugin_public_block );
 
 	}
 

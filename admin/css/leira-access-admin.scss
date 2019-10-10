@@ -37,6 +37,28 @@ input.leira-access-status:checked + label + div.leira-access-roles {
   display: block;
 }
 
+//Gutenberg
+.leira-access-container-block.components-panel__body {
+  .components-base-control.components-radio-control {
+    margin-bottom: 0;
+  }
+
+  .leira-access-roles {
+    margin-left: 20px;
+
+    > p {
+      margin: 0;
+      font-style: italic;
+      color: #666;
+    }
+
+    > .components-base-control {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
 //Menu Items
 .menu-item-settings {
   .leira-access-container {

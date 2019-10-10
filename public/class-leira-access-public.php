@@ -41,6 +41,42 @@ class Leira_Access_Public{
 	private $version;
 
 	/**
+	 * List of all visible post type IDs to the current user
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var null
+	 */
+	protected $visible_post_type_ids = null;
+
+	/**
+	 * List of all hidden post type IDs to the current user
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var null
+	 */
+	protected $hidden_post_type_ids = null;
+
+	/**
+	 * List of all visible term IDs to the current user
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var null
+	 */
+	protected $visible_term_ids = null;
+
+	/**
+	 * List of all hidden term IDs to the current user
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var null
+	 */
+	protected $hidden_term_ids = null;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @param string $plugin_name The name of the plugin.
@@ -120,21 +156,27 @@ class Leira_Access_Public{
 		$type    = '';
 
 		if ( $item instanceof WP_Term ) {
-			$access = get_term_meta( $item->term_id, '_leira-access', true );
+			$access = get_term_meta( $item->term_id, Leira_Access::META_KEY, true );
 			$type   = 'term';
 		} elseif ( $item instanceof WP_Post ) {
-			$access = get_post_meta( $item->ID, '_leira-access', true );
+			$access = get_post_meta( $item->ID, Leira_Access::META_KEY, true );
 			$type   = 'post';
 			if ( isset( $item->post_type ) && $item->post_type == 'nav_menu_item' ) {
 				$type = 'menu_item';
 			}
-		} elseif ( $item instanceof WP_Widget ) {
+		} elseif ( $item instanceof WP_Widget && isset( $item->leira_access ) ) {
 			$access = $item->leira_access;
 			$type   = 'widget';
+		} else if ( is_string( $item ) || is_array( $item ) ) {
+			$access = $item;
+			$type   = 'block';
 		}
 
 		if ( is_array( $access ) || in_array( $access, array( 'in', 'out' ) ) ) {
 			switch ( $access ) {
+				case '':
+					$visible = true;
+					break;
 				case 'in' :
 					/**
 					 * Multisite compatibility.
@@ -177,27 +219,120 @@ class Leira_Access_Public{
 
 
 	/**
-	 * Redirect user
+	 * Check if the given Term is visible or not to the current user.
+	 * This method will check for term ancestors (recursively)
 	 *
-	 * @param $id
+	 * @param WP_Term $term The term to check
 	 *
-	 * @since  1.0.0
-	 * @access public
+	 * @return bool
 	 */
-	public function redirect( $id ) {
-		$redirect_to = get_option( 'leira_redirect_to', '' );
-		$redirect_to = isset( $redirect_to['leira_redirect_to'] ) ? $redirect_to['leira_redirect_to'] : false;
+	public function check_term_access( $term ) {
 
-		$redirect_to = apply_filters( 'leira_access_redirect_url', $redirect_to );
+		$visible              = true;
+		$available_taxonomies = leira_access()->get_taxonomies();
+		$taxonomy             = ( isset( $term->taxonomy ) && ! empty( $term->taxonomy ) ) ? $term->taxonomy : false;
 
-		if ( ! empty( $redirect_to ) ) {
+		if ( $term instanceof WP_Term && in_array( $taxonomy, $available_taxonomies ) ) {
 
-			$redirect_to = wp_login_url( get_permalink( $id ) );
-			wp_redirect( $redirect_to );
+			$visible = leira_access()->public->check_access( $term );
 
+			/**
+			 * Check for ancestors
+			 */
+			$is_taxonomy_available = isset( $term->taxonomy ) && in_array( $term->taxonomy, leira_access()->get_taxonomies() );
+
+			if ( $visible && is_taxonomy_hierarchical( $term->taxonomy ) && $is_taxonomy_available ) {
+
+				$check_ancestors = false;
+
+				$check_ancestors = apply_filters( 'leira_access_check_term_ancestors', $check_ancestors, $term );
+
+				$check_ancestors = apply_filters( "leira_access_check_term_{$term->taxonomy}_ancestors", $check_ancestors );
+
+				if ( $check_ancestors && isset( $term->parent ) && $term->parent > 0 ) {
+
+					$parent = get_term( $term->parent );
+
+					$visible = leira_access()->public->check_term_access( $parent );
+				}
+			}
 		}
 
-		wp_redirect( $redirect_to );
+		return $visible;
+	}
+
+	/**
+	 * Check if the given post is visible or not to the current user.
+	 * This method will check for post ancestors (recursively)
+	 *
+	 * @param WP_Post $post
+	 *
+	 * @return bool
+	 */
+	public function check_post_type_access( $post ) {
+
+		$visible = true;
+
+		$available_post_types = leira_access()->get_post_types();
+
+		$post_type = ( isset( $post->post_type ) && ! empty( $post->post_type ) ) ? $post->post_type : false;
+
+		if ( $post instanceof WP_Post && in_array( $post_type, $available_post_types ) ) {
+
+			/**
+			 * Check current post access
+			 */
+			$visible = leira_access()->public->check_access( $post );
+
+			/**
+			 * Check for post type ancestors
+			 */
+			if ( $visible && is_post_type_hierarchical( $post_type ) ) {
+
+				$check_ancestors = false;
+
+				$check_ancestors = apply_filters( "leira_access_check_post_type_{$post_type}_ancestors", $check_ancestors );
+
+				$check_ancestors = apply_filters( 'leira_access_check_post_type_ancestors', $check_ancestors, $post );
+
+				if ( $check_ancestors && isset( $post->post_parent ) && $post->post_parent > 0 ) {
+
+					$parent = get_post( $post->post_parent );
+
+					$visible = leira_access()->public->check_post_type_access( $parent );
+				}
+			}
+
+			/**
+			 * Check post terms
+			 */
+			$check_taxonomies = false;
+
+			$check_taxonomies = apply_filters( 'leira_access_check_post_type_parent_taxonomies', $check_taxonomies, $post );
+
+			$check_taxonomies = apply_filters( "leira_access_check_post_type_{$post->post_type}_parent_taxonomies", $check_taxonomies );
+
+			if ( $visible && $check_taxonomies ) {
+
+				$available_taxonomies = leira_access()->get_taxonomies();
+
+				$parent_terms = wp_get_post_terms( $post->ID, array_keys( $available_taxonomies ) );
+
+				if ( is_array( $parent_terms ) ) {
+
+					foreach ( $parent_terms as $term ) {
+
+						$visible = leira_access()->public->check_term_access( $term );
+
+						if ( ! $visible ) {
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		return $visible;
 	}
 
 	/**
@@ -222,13 +357,13 @@ class Leira_Access_Public{
 			$meta_query = array(
 				'relation' => 'OR',
 				array(
-					'key'     => '_leira-access',
+					'key'     => Leira_Access::META_KEY,
 					'value'   => 'in',
 					'compare' => '=',
 
 				),
 				array(
-					'key'     => '_leira-access',
+					'key'     => Leira_Access::META_KEY,
 					'compare' => 'NOT EXISTS',
 				)
 			);
@@ -236,7 +371,7 @@ class Leira_Access_Public{
 			//in case the user has more than 1 role assigned
 			foreach ( $roles as $role ) {
 				$meta_query[] = array(
-					'key'     => '_leira-access',
+					'key'     => Leira_Access::META_KEY,
 					'value'   => "$role",
 					'compare' => 'LIKE',
 				);
@@ -250,19 +385,125 @@ class Leira_Access_Public{
 			$meta_query = array(
 				'relation' => 'OR',
 				array(
-					'key'     => '_leira-access',
+					'key'     => Leira_Access::META_KEY,
 					'value'   => 'out',
 					'compare' => '=',
 
 				),
 				array(
-					'key'     => '_leira-access',
+					'key'     => Leira_Access::META_KEY,
 					'compare' => 'NOT EXISTS',
 				)
 			);
 		}
 
 		return $meta_query;
+	}
+
+	/**
+	 * Redirect user. This method is called when user has no access to certain page
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function redirect() {
+		$redirect_to = get_option( 'leira_redirect_to', '' );
+
+		$redirect_to = isset( $redirect_to['leira_redirect_to'] ) ? $redirect_to['leira_redirect_to'] : '';
+
+		$redirect_to = apply_filters( 'leira_access_redirect_url', $redirect_to );
+
+		if ( empty( $redirect_to ) ) {
+			global $wp;
+
+			$url         = home_url( $wp->request );
+			$redirect_to = wp_login_url( $url );
+
+		}
+
+		wp_redirect( $redirect_to );
+
+		die();
+	}
+
+	/**
+	 * Returns a list with all post type ids that are accessible to the current user
+	 *
+	 * @return array
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function get_visible_post_type_ids() {
+
+		if ( $this->visible_post_type_ids === null ) {
+
+			$post_types = leira_access()->get_post_types();
+
+			$query_args = array(
+				'orderby'          => 'date',
+				'order'            => 'DESC',
+				'posts_per_page'   => - 1,
+				'post_type'        => $post_types,
+				'post_status'      => 'publish',
+				'offset'           => 0,
+				'fields'           => 'ids',
+				'suppress_filters' => true,
+				'meta_query'       => leira_access()->public->get_meta_query()
+			);
+			$get_posts  = new WP_Query;
+
+			$this->visible_post_type_ids = $get_posts->query( $query_args );
+		}
+
+		return $this->visible_post_type_ids;
+	}
+
+	/**
+	 * Returns a list with all post type ids that are accessible to the current user
+	 *
+	 * @return array
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function get_hidden_post_type_ids() {
+
+		if ( $this->hidden_post_type_ids === null ) {
+
+			$post_types = leira_access()->get_post_types();
+
+			$query_args                 = array(
+				'orderby'          => 'date',
+				'order'            => 'DESC',
+				'posts_per_page'   => - 1,
+				'post_type'        => $post_types,
+				'post_status'      => 'publish',
+				'offset'           => 0,
+				'fields'           => 'ids',
+				'suppress_filters' => true,
+				'post__not_in'     => $this->get_visible_post_type_ids()
+			);
+			$get_posts                  = new WP_Query;
+			$this->hidden_post_type_ids = $get_posts->query( $query_args );
+		}
+
+		return $this->hidden_post_type_ids;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_visible_term_ids() {
+
+		if ( $this->visible_term_ids === null ) {
+
+			$this->visible_term_ids = get_terms( array(
+				'fields'     => 'ids',
+				'taxonomy'   => leira_access()->get_taxonomies(),
+				'meta_query' => $this->get_meta_query()
+			) );
+		}
+
+		return $this->visible_term_ids;
 	}
 
 }

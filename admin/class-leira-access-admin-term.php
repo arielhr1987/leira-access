@@ -74,7 +74,7 @@ class Leira_Access_Admin_Term{
 			return;
 		}
 
-		$access = get_term_meta( $term_id, '_leira-access', true );
+		$access = get_term_meta( $term_id, Leira_Access::META_KEY, true );
 		$output = leira_access()->admin->column_content( $access );
 
 		echo $output;
@@ -180,10 +180,10 @@ class Leira_Access_Admin_Term{
 			$meta_query = new WP_Meta_Query( array(
 					'relation' => 'OR',
 					array(
-						'key' => '_leira-access',
+						'key' => Leira_Access::META_KEY,
 					),
 					array(
-						'key'     => '_leira-access',
+						'key'     => Leira_Access::META_KEY,
 						'compare' => 'NOT EXISTS'
 					)
 				)
@@ -263,7 +263,7 @@ class Leira_Access_Admin_Term{
 	 * @access public
 	 */
 	public function edit_form_fields( $tag ) {
-		$roles = get_term_meta( $tag->term_id, '_leira-access', true );
+		$roles = get_term_meta( $tag->term_id, Leira_Access::META_KEY, true );
 
 		?>
         <tr>

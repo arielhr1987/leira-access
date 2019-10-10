@@ -68,7 +68,7 @@ class Leira_Access_Admin_Post_Type{
 			return;
 		}
 
-		$access = get_post_meta( $post_id, '_leira-access', true );
+		$access = get_post_meta( $post_id, Leira_Access::META_KEY, true );
 		$output = leira_access()->admin->column_content( $access );
 
 		echo $output;
@@ -117,7 +117,7 @@ class Leira_Access_Admin_Post_Type{
 	public function render_metabox( $item ) {
 
 		$id    = isset( $item->ID ) ? $item->ID : false;
-		$roles = get_post_meta( $id, '_leira-access', true );
+		$roles = get_post_meta( $id, Leira_Access::META_KEY, true );
 		leira_access()->admin->form( array(
 			'roles'      => $roles,
 			'show_label' => false

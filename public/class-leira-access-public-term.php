@@ -25,26 +25,26 @@ class Leira_Access_Public_Term{
 	 * Check access to Term page, if not available redirect to login page
 	 *
 	 * @return bool
+	 * @since  1.0.0
+	 * @access public
 	 */
 	public function check_access() {
 
-		$term                 = get_queried_object();
-		$available_taxonomies = leira_access()->get_taxonomies();
-		$taxonomy             = ( isset( $term->taxonomy ) && ! empty( $term->taxonomy ) ) ? $term->taxonomy : false;
+		$visible = true;
 
-		if ( $term instanceof WP_Term && in_array( $taxonomy, $available_taxonomies ) ) {
+		$term = get_queried_object();
 
-			$visible = leira_access()->public->check_access( $term );
+		if ( $term instanceof WP_Term ) {
 
-			//check for ancestors
+			$visible = leira_access()->public->check_term_access( $term );
 
 			if ( ! $visible ) {
 
-				leira_access()->public->redirect( $term->ID );
+				leira_access()->public->redirect();
 
 			}
 		}
 
-		return true;
+		return $visible;
 	}
 }

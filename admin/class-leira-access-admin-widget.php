@@ -34,7 +34,7 @@ class Leira_Access_Admin_Widget{
 	public function form( $widget, $return, $instance ) {
 
 		$id    = isset( $widget->id ) ? $widget->id : false;
-		$roles = isset( $instance['_leira-access'] ) ? $instance['_leira-access'] : false;
+		$roles = isset( $instance[Leira_Access::META_KEY] ) ? $instance[Leira_Access::META_KEY] : false;
 
 		leira_access()->admin->form( array(
 			'roles' => $roles,
@@ -60,7 +60,7 @@ class Leira_Access_Admin_Widget{
 	public function update( $instance, $new_instance, $old_instance, $widget ) {
 		$save = leira_access()->admin->save( $widget->id, 'widget' );
 
-		$new_instance['_leira-access'] = $save;
+		$new_instance[Leira_Access::META_KEY] = $save;
 
 		return $new_instance;
 	}
