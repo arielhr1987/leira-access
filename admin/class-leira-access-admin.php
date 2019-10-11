@@ -336,13 +336,23 @@ class Leira_Access_Admin{
 		$status = false;
 		$roles  = array();
 		if ( $use_post_id ) {
-			$status = isset( $_POST['leira-access-status'][ $id ] ) ? $_POST['leira-access-status'][ $id ] : $status;
+			$status = isset( $_POST['leira-access-status'][ $id ] ) ? sanitize_text_field( $_POST['leira-access-status'][ $id ] ) : $status;
 			$roles  = ( ! empty( $_POST['leira-access-role'][ $id ] ) ) ? $_POST['leira-access-role'][ $id ] : $roles;
 		} else {
-			$status = isset( $_POST['leira-access-status'] ) ? $_POST['leira-access-status'] : $status;
+			$status = isset( $_POST['leira-access-status'] ) ? sanitize_text_field( $_POST['leira-access-status'] ) : $status;
 			$roles  = ( ! empty( $_POST['leira-access-role'] ) ) ? $_POST['leira-access-role'] : $roles;
 		}
 
+		/**
+		 * Sanitize roles input
+		 */
+		if ( is_array( $roles ) ) {
+			$roles = array_map( function( $role ) {
+				return sanitize_text_field( $role );
+			}, $roles );
+		} else {
+			$roles = array();
+		}
 
 		if ( ! empty( $status ) ) {
 

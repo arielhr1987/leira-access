@@ -234,7 +234,7 @@ class Leira_Access_Admin_Post_Type{
 			return $post_id;
 		}
 
-		if ( ! in_array( $_POST['post_type'], $this->get_post_types() ) ) {
+		if ( ! in_array( sanitize_text_field($_POST['post_type']), $this->get_post_types() ) ) {
 			return $post_id;
 		}
 
