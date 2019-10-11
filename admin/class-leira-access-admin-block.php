@@ -45,9 +45,11 @@ class Leira_Access_Admin_Block{
 		$roles = leira_access()->admin->get_available_roles();
 		?>
         <script>
-            wp['_leira-access'] = {
-                roles: <?php echo json_encode( $roles ); ?>
-            };
+            if (typeof wp !== 'undefined') {
+                wp['_leira-access'] = {
+                    roles: <?php echo json_encode( $roles ); ?>
+                };
+            }
         </script>
 		<?php
 	}
