@@ -42,6 +42,7 @@
             member: "Member",
             editor: "Editor"
         };
+        var roles = wp['_leira-access'].roles;
 
         if (Array.isArray(value) || value === 'in') {
             roleElements.push(el('p', {}, __("Restrict access to a minimum role.")));

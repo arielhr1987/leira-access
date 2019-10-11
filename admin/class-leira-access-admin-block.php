@@ -35,4 +35,21 @@ class Leira_Access_Admin_Block{
 		);
 	}
 
+	/**
+	 * Add roles to admin
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 */
+	public function insert_roles() {
+		$roles = leira_access()->admin->get_available_roles();
+		?>
+        <script>
+            wp['_leira-access'] = {
+                roles: <?php echo json_encode( $roles ); ?>
+            };
+        </script>
+		<?php
+	}
+
 }

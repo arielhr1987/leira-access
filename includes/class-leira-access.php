@@ -362,6 +362,8 @@ class Leira_Access{
 
 			$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_admin_block, 'enqueue_js' );
 
+			$this->loader->add_action( 'admin_footer', $plugin_admin_block, 'insert_roles' );
+
 			//add to loader
 			$this->loader->set( 'admin_block', $plugin_admin_block );
 
