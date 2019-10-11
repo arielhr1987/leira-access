@@ -161,7 +161,7 @@ class Leira_Access_Admin{
 					$roles .= '<ul>';
 					foreach ( $access as $role ) {
 						$display_role = esc_html( translate_user_role( $wp_roles->roles[ $role ]['name'] ) );
-						$roles        .= sprintf( '<li>%s</li>', $display_role );
+						$roles        .= esc_html( sprintf( '<li>%s</li>', $display_role ) );
 					}
 					$roles .= '</ul>';
 				}
@@ -344,7 +344,7 @@ class Leira_Access_Admin{
 		}
 
 		/**
-		 * Sanitize roles input
+		 * Sanitize roles input data
 		 */
 		if ( is_array( $roles ) ) {
 			$roles = array_map( function( $role ) {
