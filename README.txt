@@ -1,10 +1,10 @@
 === Leira Access ===
 Contributors: arielhr1987
-Donate link: https://github.com/arielhr1987
+Donate link: https://leira.dev
 Tags: users, content, restrict, access, widgets, nav, blocks, access
 Requires at least: 4.1
 Tested up to: 5.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ Only Administrators and Super Admins.
 1. Basic
 
 == Changelog ==
+
+= 1.0.1 =
+* Author URL updated
 
 = 1.0.0 =
 * First plugin release.

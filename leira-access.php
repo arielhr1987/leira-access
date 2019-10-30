@@ -13,12 +13,12 @@
  * @package           Leira_Access
  *
  * @wordpress-plugin
- * Plugin Name:       Leira Access
+ * Plugin Name:       Access
  * Plugin URI:        leira-access
  * Description:       Restrict your users access to different site sections like navs, widgets, blocks, pages, categories etc.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Ariel
- * Author URI:        https://github.com/arielhr1987
+ * Author URI:        https://leira.dev
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       leira-access
