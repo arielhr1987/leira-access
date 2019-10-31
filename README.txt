@@ -58,6 +58,9 @@ Only Administrators and Super Admins.
 
 == Changelog ==
 
+= 1.0.3 =
+* Updating assets
+
 = 1.0.2 =
 * New plugin display name
 
