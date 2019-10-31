@@ -16,7 +16,7 @@
  * Plugin Name:       Access
  * Plugin URI:        leira-access
  * Description:       Restrict your users access to different site sections like navs, widgets, blocks, pages, categories etc.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Ariel
  * Author URI:        https://leira.dev
  * License:           GPL-2.0+
