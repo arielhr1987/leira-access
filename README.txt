@@ -1,5 +1,5 @@
 === Access ===
-Contributors: arielhr1987
+Contributors: arielhr1987, jlcd0894
 Donate link: https://leira.dev
 Tags: users, content, restrict, access, widgets, nav, blocks, access
 Requires at least: 4.1
