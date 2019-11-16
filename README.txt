@@ -4,7 +4,7 @@ Donate link: https://leira.dev
 Tags: users, content, restrict, access, widgets, nav, blocks, access
 Requires at least: 4.1
 Tested up to: 5.3
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ Only Administrators and Super Admins.
 1. Basic
 
 == Changelog ==
+
+= 1.0.4 =
+* Bug fix. List items containing roles are not escaped anymore
 
 = 1.0.3 =
 * Updating assets
