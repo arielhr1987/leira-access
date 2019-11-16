@@ -3,7 +3,7 @@ Contributors: arielhr1987, jlcd0894
 Donate link: https://leira.dev
 Tags: users, content, restrict, access, widgets, nav, blocks, access
 Requires at least: 4.1
-Tested up to: 5.2
+Tested up to: 5.3
 Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
