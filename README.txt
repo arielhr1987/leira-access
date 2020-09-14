@@ -14,7 +14,7 @@ Restrict your users access to different site sections like navs, widgets, blocks
 
 This is a plugin created to bring a clean and simple interface for Wordpress administrator and developer so they can create "members" website with just a few clicks
 
-The plugin provides action and filters so it can be extended by developers
+The plugin provides action and filters so it can be extended by developers.
 
 == Installation ==
 
