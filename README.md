@@ -1,2 +1,2 @@
-# Wordpress Restrict Content
-Wordpress plugin to restrict content to users with specific role.
+# WordPress Restrict Content
+WordPress plugin to restrict content to users with a specific role.

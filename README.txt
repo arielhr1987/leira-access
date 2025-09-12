@@ -8,11 +8,11 @@ Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Restrict your users access to different site sections like navs, widgets, blocks, pages, categories etc.
+Restrict your users' access to different site sections like navs, widgets, blocks, pages, categories, etc.
 
 == Description ==
 
-This is a plugin created to bring a clean and simple interface for Wordpress administrator and developer so they can create "members" website with just a few clicks
+This is a plugin created to bring a clean and simple interface for WordPress administrator and developer so they can create a "members" website with just a few clicks
 
 The plugin provides action and filters so it can be extended by developers.
 
@@ -34,7 +34,7 @@ Yes.
 
 = What user access restrictions are available =
 
-You will be able to restrict access to the different sections to "Everyone", "Logged Out Users", "Logged In Users" or users with specific roles.
+You will be able to restrict access to the different sections to "Everyone", "Logged-Out Users", "Logged-In Users" or users with specific roles.
 
 = What sections can I restrict to users? =
 

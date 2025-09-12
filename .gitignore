@@ -1,2 +1,9 @@
-.DS_Store
 .sass-cache
+.DS_Store
+.idea
+*.code-workspace
+composer.lock
+package-lock.json
+/logs
+/node_modules
+/vendor
