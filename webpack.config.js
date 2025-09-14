@@ -3,8 +3,9 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 module.exports = {
 	...defaultConfig,
 	entry: {
-		admin: './src/admin.js',
-		public: './src/public.js',
+		sidebar: './src/sidebar.js',
+		// admin: './src/admin.js',
+		// public: './src/public.js',
 	},
 	output: {
 		filename: '[name].js',

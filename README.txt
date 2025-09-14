@@ -48,7 +48,7 @@ Answer to foo bar dilemma.
 * Any custom Taxonomy visible in the frontend
 * Blocks
 
-= Which user is allowed to set restrictions to content? =
+= Which user is allowed to set restrictions on content? =
 
 Only Administrators and Super Admins.
 

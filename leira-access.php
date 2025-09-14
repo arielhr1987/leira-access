@@ -25,8 +25,10 @@
  * Domain Path:       /languages
  */
 
+use Leira_Access\Includes\Plugin;
+
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
@@ -35,44 +37,29 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'LEIRA_ACCESS_VERSION', '1.0.0' );
+define('LEIRA_ACCESS_VERSION', '1.0.4');
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-leira-access-activator.php
+ * Include the autoloader.
  */
-function activate_leira_access() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-leira-access-activator.php';
-	Leira_Access_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-leira-access-deactivator.php
- */
-function deactivate_leira_access() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-leira-access-deactivator.php';
-	Leira_Access_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_leira_access' );
-register_deactivation_hook( __FILE__, 'deactivate_leira_access' );
+require_once plugin_dir_path(__FILE__).'includes/autoload.php';
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-leira-access.php';
+require plugin_dir_path(__FILE__).'includes/class-plugin.php';
 
 /**
  * Helper method to get the main instance of the plugin
  *
- * @return Leira_Access
+ * @return Plugin The plugin instance.
  * @since    1.0.0
  * @access   global
  */
-function leira_access() {
-	return Leira_Access::instance();
+function leira_access()
+{
+	return Plugin::instance();
 }
 
 /**
